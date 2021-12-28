@@ -1,13 +1,16 @@
 class Player {
-    constructor(x, y, height, width, playerName, moveKeys) {
+    constructor(x, y, height, width, scale, moveSpeed, shadowScale, playerName, moveKeys) {
         this.playerName = playerName;
         this.lastMove = 'D';
         this.lives = 3;
         this.coins = 0;
         this.moveKeys = moveKeys;
-        this.moveSpeed = 5;
+        this.moveSpeed = moveSpeed;
         this.sprite = createSprite(x, y, height, width);
+        this.scale = scale;
+        this.shadowScale = shadowScale;
         this.shadow = this.addShadow();
+        this.canLevitate = false;
         this.dieMessage = "YOU DIED DUMBASS";
         this.addAnimations();
     }
@@ -28,9 +31,9 @@ class Player {
     }
 
     addShadow() {
-        var shadow = createSprite(this.sprite.position.x, this.sprite.position.y + 40, 150, 160);
+        var shadow = createSprite(this.sprite.position.x, this.sprite.position.y + (20 * this.scale), 64, 64);
         shadow.addImage(loadImage(`${imagesPath}/shadow.png`));
-        shadow.scale = 0.4;
+        shadow.scale = this.shadowScale;
         this.sprite.collide(shadow);
         return shadow;
     }
@@ -115,14 +118,14 @@ class Player {
         var attackKey = this.moveKeys[4];
         var jumpKey = this.moveKeys[5];
 
-        if (keyDown(jumpKey)) {
-            this.sprite.scale = 2.3
-            this.shadow.scale = 0.45
-            this.sprite.position.y = this.shadow.position.y - 58
+        if (keyDown(jumpKey) && this.canLevitate) {
+            this.sprite.scale = this.scale + 0.3
+            this.shadow.scale = this.shadowScale + 0.05* this.shadow.scale
+            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) - (15*this.shadow.scale)
         } else {
-            this.sprite.scale = 2
-            this.shadow.scale = 0.4
-            this.sprite.position.y = this.shadow.position.y - 38
+            this.sprite.scale = this.scale
+            this.shadow.scale = this.shadowScale
+            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) + (2**this.shadow.scale)
         }
 
         if (keyDown(moveUpKey)) {
