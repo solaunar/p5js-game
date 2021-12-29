@@ -8,13 +8,13 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  player1 = new Player(200, 200, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
-  dummy = new Enemies (256, 256, 32, 32, [8, 1], 3, 200)
-  tile1 = new Tile("poop", [1, 3], 3);
-  tile2 = new Tile("poop", [1, 1], 3);
-  tile3 = new Tile("poop", [5, 3], 3);
-  tile4 = new Tile("poop", [2, 0], 3);
-  tile5 = new Tile("poop", [5, 2], 3);
+  player1 = new Player(width/2, height/2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
+  feather = new Items (32, 32, [7, 0], 2, 200)
+  tile1 = new Tile("poop", [1, 3], 2.5);
+  tile2 = new Tile("poop", [1, 1], 2.5);
+  tile3 = new Tile("poop", [5, 3], 2.5);
+  tile4 = new Tile("poop", [2, 0], 2.5);
+  tile5 = new Tile("poop", [5, 2], 2.5);
 }
 
 function windowResized() {
@@ -24,7 +24,7 @@ function windowResized() {
 }
 
 function draw() {
-  background(220);
+  background(32);
 
   ///////////////////////////////// DRAWING MAP
 
@@ -40,6 +40,7 @@ function draw() {
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,]
   
   var col = 16;
+  var row = 10;
 
   for (let i = 0; i < map.length; i++) {  
     
@@ -49,28 +50,31 @@ function draw() {
     var scale = tile1.scale;
     var size = scale*16;
 
+    var bufferx = (windowWidth-(col*size))/2+size/2;  //width minus half the map plus half a tile to center
+    var buffery = (windowHeight-(row*size))/2+size/2; //height minus half the map plus half a tile to center
+
     switch(map[i]) {
       case 2:
-        tile2.draw((size/2)+corx*size, (size/2)+cory*size);
+        tile2.draw(bufferx+corx*size, buffery+cory*size);
         break;
       case 3:
-        tile3.draw((size/2)+corx*size, (size/2)+cory*size);
+        tile3.draw(bufferx+corx*size, buffery+cory*size);
         break;
       case 4:
-        tile4.draw((size/2)+corx*size, (size/2)+cory*size);
+        tile4.draw(bufferx+corx*size, buffery+cory*size);
         break;
       case 5:
-        tile5.draw((size/2)+corx*size, (size/2)+cory*size);
+        tile5.draw(bufferx+corx*size, buffery+cory*size);
         break;
       default:
-        tile1.draw((size/2)+corx*size, (size/2)+cory*size);
+        tile1.draw(bufferx+corx*size, buffery+cory*size);
     }
   }
 
   ///////////////////////////////// DRAWING REST  
 
-  dummy.draw(256,256);
-  dummy.update;
+  feather.draw(570,370);
+  feather.update;
   player1.draw();
   player1.update();
 }
