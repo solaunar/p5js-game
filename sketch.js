@@ -9,7 +9,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   player1 = new Player(width/2, height/2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
-  feather = new Items (32, 32, [7, 0], 2, 200)
+  wall = new Walls (32, 32, [1, 1], 2.5, 200)
   tile1 = new Tile("poop", [1, 3], 2.5);
   tile2 = new Tile("poop", [1, 1], 2.5);
   tile3 = new Tile("poop", [5, 3], 2.5);
@@ -55,7 +55,8 @@ function draw() {
 
     switch(map[i]) {
       case 2:
-        tile2.draw(bufferx+corx*size, buffery+cory*size);
+        wall.draw(bufferx+corx*size, buffery+cory*size);
+        wall.collision(player1);
         break;
       case 3:
         tile3.draw(bufferx+corx*size, buffery+cory*size);
@@ -72,9 +73,7 @@ function draw() {
   }
 
   ///////////////////////////////// DRAWING REST  
-
-  feather.draw(570,370);
-  feather.update;
+  
   player1.draw();
   player1.update();
 }
