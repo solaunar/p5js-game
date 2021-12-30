@@ -1,13 +1,10 @@
 var player1;
 var imagesPath = 'assets/images/';
 var tileset;
-var wall;
-var tile1;
-var tile2;
-var tile3;
-var tile4;
-var tile5;
 var gameMap;
+var walls;
+var floor;
+var hazards;
 
 var tiles = {
   01: [0, 0, "wall_1"],
@@ -51,7 +48,7 @@ var lvl =[
   [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
   [10, 25, 26, 26, 30, 30, 30, 30, 30, 30, 30, 30, 26, 26, 26, 10],
   [10, 25, 26, 30, 26, 26, 26, 26, 26, 26, 26, 26, 30, 26, 26, 10],
-  [10, 25, 26, 26, 30, 30, 30, 30, 30, 30, 30, 30, 26, 26, 26, 10],
+  [10, 25, 26, 26, 30, 30, 30, 26, 26, 30, 30, 30, 26, 26, 26, 10],
   [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
   [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
   [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
@@ -63,24 +60,18 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  player1 = new Player(width/2, height/2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
   gameMap = new Map(lvl, 2.5);
-}
-
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  tint(255, 255);
+  walls = gameMap.walls;
+  floor = gameMap.floor;
+  hazards = gameMap.hazards;
+  player1 = new Player(width/2, height/2, 64, 64, 2, 7, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
   gameMap.createSprites();
 }
 
 function draw() {
   background(32);
-
-  ///////////////////////////////// DRAWING MAP
-  gameMap.createSprites();
-
-  ///////////////////////////////// DRAWING REST  
   
+  gameMap.draw();
   player1.draw();
   player1.update();
 }

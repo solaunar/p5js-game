@@ -1,6 +1,6 @@
 class Tile {
-    constructor(name, index, scale) {
-        this.sprite = createSprite(0, 0, 16, 16);
+    constructor(name, index, scale, x, y) {
+        this.sprite = createSprite(x, y, 16, 16);
         this.index = index;
         this.scale = scale;
         this.name = name;
@@ -9,9 +9,7 @@ class Tile {
         this.addImage();
     }
 
-    draw(x, y) {
-        this.sprite.position.x = x;
-        this.sprite.position.y = y;
+    draw() {
         drawSprite(this.sprite);
     }
 

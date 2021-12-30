@@ -1,5 +1,7 @@
 class Player {
     constructor(x, y, height, width, scale, moveSpeed, shadowScale, playerName, moveKeys) {
+        this.initialX = x;
+        this.initialY = y;
         this.playerName = playerName;
         this.lastMove = 'D';
         this.lives = 3;
@@ -14,6 +16,8 @@ class Player {
         this.shadow = this.addShadow();
         this.canLevitate = false;
         this.dieMessage = "YOU DIED DUMBASS";
+        this.sprite.setCollider("rectangle", 0, height/2, 4, 4);
+        this.shadow.setCollider("rectangle", 0, 0, 32, 16);
         this.addAnimations();
     }
 
@@ -27,6 +31,13 @@ class Player {
     update(){
         if (this.isAlive()){
             this.playerMove();
+            if (this.sprite.overlap(hazards)){
+                this.loseLife();
+                console.log(this.lives);
+            }
+            if (this.shadow.collide(walls)){
+                this.stop();
+            }
         } else {
             textSize(50);
             fill(255);
@@ -73,45 +84,21 @@ class Player {
 
     switchIdle() {
         if (this.lastMove == 'D') {
-            this.sprite.changeAnimation('idleD')
+            this.sprite.changeAnimation('idleD');
         } else if (this.lastMove == 'U') {
-            this.sprite.changeAnimation('idleU')
+            this.sprite.changeAnimation('idleU');
         } else {
-            this.sprite.changeAnimation('idleRL')
+            this.sprite.changeAnimation('idleRL');
         }
     }
 
     switchAttack() {
         if (this.lastMove == 'D') {
-            this.sprite.changeAnimation('attackD')
+            this.sprite.changeAnimation('attackD');
         } else if (this.lastMove == 'U') {
-            this.sprite.changeAnimation('attackU')
+            this.sprite.changeAnimation('attackU');
         } else {
-            this.sprite.changeAnimation('attackRL')
-        }
-    }
-
-    jump() {
-        this.sprite.scale = 2.3
-        this.shadow.scale = 0.45
-        if (this.lastMove == 'D') {
-            this.sprite.changeAnimation('walkD')
-            this.sprite.velocity.y = 3
-            this.shadow.velocity.y = 2
-        } else if (this.lastMove == 'U') {
-            this.sprite.changeAnimation('walkU')
-            this.sprite.velocity.y = -2
-            this.sprite.velocity.y = -3
-        } else {
-            this.sprite.changeAnimation('walkRL')
-            this.sprite.velocity.y = -1
-            if (this.lastMove == 'R') {
-                this.sprite.velocity.x = 2
-                this.shadow.velocity.x = 2
-            } else {
-                this.sprite.velocity.y = -2
-                this.shadow.velocity.x = -2
-            }
+            this.sprite.changeAnimation('attackRL');
         }
     }
 
@@ -124,56 +111,81 @@ class Player {
         var jumpKey = this.moveKeys[5];
 
         if (keyDown(jumpKey) && this.canLevitate) {
-            this.sprite.scale = this.scale + 0.3
-            this.shadow.scale = this.shadowScale + 0.05* this.shadow.scale
-            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) - (15*this.shadow.scale)
+            this.sprite.scale = this.scale + 0.3;
+            this.shadow.scale = this.shadowScale + 0.05* this.shadow;
+            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) - (15*this.shadow.scale);
         } else {
-            this.sprite.scale = this.scale
-            this.shadow.scale = this.shadowScale
-            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) + (2**this.shadow.scale)
+            this.sprite.scale = this.scale;
+            this.shadow.scale = this.shadowScale;
+            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) + (2**this.shadow.scale);
         }
 
         if (keyDown(moveUpKey)) {
             if (this.sprite.position.y > (this.height/2) ){
-                this.sprite.changeAnimation('walkU')
-                this.sprite.position.y -= this.moveSpeed
-                this.shadow.position.y -= this.moveSpeed
-                this.lastMove = 'U'
+                this.sprite.changeAnimation('walkU');
+                this.sprite.position.y -= this.moveSpeed;
+                this.shadow.position.y -= this.moveSpeed;
+                this.lastMove = 'U';
             }            
         }
         else if (keyDown(moveDownKey)) {
             if (this.sprite.position.y < windowHeight-(this.height/2)){
-                this.sprite.changeAnimation('walkD')
-                this.sprite.position.y += this.moveSpeed
-                this.shadow.position.y += this.moveSpeed
-                this.lastMove = 'D'
+                this.sprite.changeAnimation('walkD');
+                this.sprite.position.y += this.moveSpeed;
+                this.shadow.position.y += this.moveSpeed;
+                this.lastMove = 'D';
             }
         }
         else if (keyDown(moveLeftKey)) {
             if (this.sprite.position.x > (this.width/2)){
-                this.sprite.changeAnimation('walkRL')
-                this.sprite.mirrorX(-1)
-                this.sprite.position.x -= this.moveSpeed
-                this.shadow.mirrorX(-1)
-                this.shadow.position.x -= this.moveSpeed
-                this.lastMove = 'R'
+                this.sprite.changeAnimation('walkRL');
+                this.sprite.mirrorX(-1);
+                this.sprite.position.x -= this.moveSpeed;
+                this.shadow.mirrorX(-1);
+                this.shadow.position.x -= this.moveSpeed;
+                this.lastMove = 'L';
             }
         }
         else if (keyDown(moveRightKey)) {
             if (this.sprite.position.x < windowWidth-(this.height/2)){
-                this.sprite.changeAnimation('walkRL')
-                this.sprite.mirrorX(1)
-                this.sprite.position.x += this.moveSpeed
-                this.shadow.mirrorX(1)
-                this.shadow.position.x += this.moveSpeed
-                this.lastMove = 'L'
+                this.sprite.changeAnimation('walkRL');
+                this.sprite.mirrorX(1);
+                this.sprite.position.x += this.moveSpeed;
+                this.shadow.mirrorX(1);
+                this.shadow.position.x += this.moveSpeed;
+                this.lastMove = 'R';
             }
         } else {
-            this.switchIdle()
+            this.switchIdle();
         }
 
         if (keyDown(attackKey)) {
-            this.switchAttack()
+            this.switchAttack();
+        }
+    }
+
+    loseLife() {
+        this.lives -= 1;
+        this.sprite.position.x = this.initialX;
+        this.sprite.position.y = this.initialY;
+        this.lastMove = 'D';
+        this.shadow.position.x = this.sprite.position.x; 
+        this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
+    }
+
+    stop(){
+        if (this.lastMove == 'R'){
+            this.sprite.position.x -= this.moveSpeed;
+            this.shadow.position.x = this.sprite.position.x;
+        } else if (this.lastMove == 'L'){
+            this.sprite.position.x += this.moveSpeed;
+            this.shadow.position.x = this.sprite.position.x;
+        } else if(this.lastMove == 'U'){
+            this.sprite.position.y += this.moveSpeed;
+            this.shadow.position.y += this.moveSpeed;
+        } else if(this.lastMove == 'D'){
+            this.sprite.position.y -= this.moveSpeed;
+            this.shadow.position.y -= this.moveSpeed;
         }
     }
 }

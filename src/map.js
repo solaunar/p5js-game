@@ -1,10 +1,18 @@
 class Map{
     constructor(tileList, scale){
         this.tileList = tileList;
+        this.tiles = [];
         this.scale = scale;
-        this.solid = new Group();
-        this.enemies = new Group();
-        this.items = new Group();
+        this.tilesSprites = new Group();
+        this.walls = new Group();
+        this.hazards = new Group();
+        this.floor = new Group();
+    }
+
+    draw(){
+        drawSprites(this.hazards);
+        drawSprites(this.walls);
+        drawSprites(this.floor);
     }
 
     createSprites(){
@@ -18,8 +26,17 @@ class Map{
         for (let r = 0; r < row; r++) {
             for (let c = 0; c < col; c++) {
                 var tileInfo = tiles[this.tileList[r][c]];
-                var tile = new Tile(tileInfo[2], tileInfo, this.scale);
-                tile.draw(bufferx+c*size, buffery+r*size);
+                var tileTitle = tileInfo[2];
+                var tile = new Tile(tileTitle, tileInfo, this.scale, bufferx+c*size, buffery+r*size);
+                this.tiles.push(tile);
+                this.tilesSprites.add(tile.sprite);
+                if (tileTitle.startsWith("wall") || tileTitle.startsWith("side")){
+                    this.walls.add(tile.sprite);
+                } else if (tileTitle.startsWith("pit")) {
+                    this.hazards.add(tile.sprite);
+                } else {
+                    this.floor.add(tile.sprite);
+                }
             }
         }
     }
