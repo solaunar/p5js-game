@@ -6,6 +6,8 @@ class Player {
         this.coins = 0;
         this.moveKeys = moveKeys;
         this.moveSpeed = moveSpeed;
+        this.height = height;
+        this.width = width;
         this.sprite = createSprite(x, y, height, width);
         this.scale = scale;
         this.shadowScale = shadowScale;
@@ -16,7 +18,9 @@ class Player {
     }
 
     draw(){
+        tint(255, 160);
         drawSprite(this.shadow);
+        tint(255, 255);
         drawSprite(this.sprite);
     }
 
@@ -32,7 +36,8 @@ class Player {
 
     addShadow() {
         var shadow = createSprite(this.sprite.position.x, this.sprite.position.y + (20 * this.scale), 64, 64);
-        shadow.addImage(loadImage(`${imagesPath}/shadow.png`));
+        var shadowImg = loadImage(`${imagesPath}/shadow.png`);
+        shadow.addImage(shadowImg);
         shadow.scale = this.shadowScale;
         this.sprite.collide(shadow);
         return shadow;
@@ -129,32 +134,40 @@ class Player {
         }
 
         if (keyDown(moveUpKey)) {
-            this.sprite.changeAnimation('walkU')
-            this.sprite.position.y -= this.moveSpeed
-            this.shadow.position.y -= this.moveSpeed
-            this.lastMove = 'U'
+            if (this.sprite.position.y > (this.height/2) ){
+                this.sprite.changeAnimation('walkU')
+                this.sprite.position.y -= this.moveSpeed
+                this.shadow.position.y -= this.moveSpeed
+                this.lastMove = 'U'
+            }            
         }
         else if (keyDown(moveDownKey)) {
-            this.sprite.changeAnimation('walkD')
-            this.sprite.position.y += this.moveSpeed
-            this.shadow.position.y += this.moveSpeed
-            this.lastMove = 'D'
+            if (this.sprite.position.y < windowHeight-(this.height/2)){
+                this.sprite.changeAnimation('walkD')
+                this.sprite.position.y += this.moveSpeed
+                this.shadow.position.y += this.moveSpeed
+                this.lastMove = 'D'
+            }
         }
         else if (keyDown(moveLeftKey)) {
-            this.sprite.changeAnimation('walkRL')
-            this.sprite.mirrorX(-1)
-            this.sprite.position.x -= this.moveSpeed
-            this.shadow.mirrorX(-1)
-            this.shadow.position.x -= this.moveSpeed
-            this.lastMove = 'R'
+            if (this.sprite.position.x > (this.width/2)){
+                this.sprite.changeAnimation('walkRL')
+                this.sprite.mirrorX(-1)
+                this.sprite.position.x -= this.moveSpeed
+                this.shadow.mirrorX(-1)
+                this.shadow.position.x -= this.moveSpeed
+                this.lastMove = 'R'
+            }
         }
         else if (keyDown(moveRightKey)) {
-            this.sprite.changeAnimation('walkRL')
-            this.sprite.mirrorX(1)
-            this.sprite.position.x += this.moveSpeed
-            this.shadow.mirrorX(1)
-            this.shadow.position.x += this.moveSpeed
-            this.lastMove = 'L'
+            if (this.sprite.position.x < windowWidth-(this.height/2)){
+                this.sprite.changeAnimation('walkRL')
+                this.sprite.mirrorX(1)
+                this.sprite.position.x += this.moveSpeed
+                this.shadow.mirrorX(1)
+                this.shadow.position.x += this.moveSpeed
+                this.lastMove = 'L'
+            }
         } else {
             this.switchIdle()
         }
