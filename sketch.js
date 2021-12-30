@@ -5,6 +5,7 @@ var gameMap;
 var walls;
 var floor;
 var hazards;
+var song;
 
 var tiles = {
   01: [0, 0, "wall_1"],
@@ -56,10 +57,13 @@ var lvl =[
 
 function preload() {
   tileset = loadImage(imagesPath + 'tiles/dungeon-tileset-full.png');
+  song = loadSound('./assets/sound/tracks/BloodyTears.wav');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  song.setLoop(true);
+  song.setVolume(0.20);
   gameMap = new Map(lvl, 2.5);
   walls = gameMap.walls;
   floor = gameMap.floor;
@@ -69,8 +73,8 @@ function setup() {
 }
 
 function draw() {
+  if(song.isPlaying()==false){song.play()}
   background(32);
-  
   gameMap.draw();
   player1.draw();
   player1.update();
