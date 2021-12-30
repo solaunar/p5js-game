@@ -18,7 +18,9 @@ class Player {
     }
 
     draw(){
+        tint(255, 160);
         drawSprite(this.shadow);
+        tint(255, 255);
         drawSprite(this.sprite);
     }
 
@@ -34,7 +36,8 @@ class Player {
 
     addShadow() {
         var shadow = createSprite(this.sprite.position.x, this.sprite.position.y + (20 * this.scale), 64, 64);
-        shadow.addImage(loadImage(`${imagesPath}/shadow.png`));
+        var shadowImg = loadImage(`${imagesPath}/shadow.png`);
+        shadow.addImage(shadowImg);
         shadow.scale = this.shadowScale;
         this.sprite.collide(shadow);
         return shadow;

@@ -16,7 +16,7 @@ class Tile {
     }
 
     addImage() {
-        this.sprite.addImage(tileset.get(16 * this.index[0], 16 * this.index[1], 16, 16));
+        this.sprite.addImage(tileset.get(16 * this.index[1], 16 * this.index[0], 16, 16));
         this.sprite.scale = this.scale;
     }
 }
