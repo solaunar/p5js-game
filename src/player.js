@@ -56,14 +56,20 @@ class Player {
 
     addAnimations() {
         this.addSingleAnimation('D', 'idleD', 1);
+        this.addSingleAnimation('D', 'deadD', 1);
         this.addSingleAnimation('D', 'walkD', 6);
         this.addSingleAnimation('D', 'attackD', 9);
+        this.addSingleAnimation('D', 'deathD', 7);
         this.addSingleAnimation('RL', 'idleRL', 1);
+        this.addSingleAnimation('RL', 'deadRL', 1);
         this.addSingleAnimation('RL', 'walkRL', 6);
         this.addSingleAnimation('RL', 'attackRL', 9);
+        this.addSingleAnimation('RL', 'deathRL', 7);
         this.addSingleAnimation('U', 'idleU', 1);
+        this.addSingleAnimation('U', 'deadU', 1);
         this.addSingleAnimation('U', 'walkU', 6);
         this.addSingleAnimation('U', 'attackU', 9);
+        this.addSingleAnimation('U', 'deathU', 7);
     }
 
     addSingleAnimation(direction, animationName, numberOfFrames) {
@@ -79,6 +85,7 @@ class Player {
     isAlive() {
         if (this.lives > 0)
             return true;
+        this.switchDeath();
         return false;
     }
 
@@ -101,7 +108,18 @@ class Player {
             this.sprite.changeAnimation('attackRL');
         }
     }
-
+    ////////////////////////////////////////////////////////////// MUST FIX
+    
+    switchDeath() {       // He keeps dying eternally
+        if (this.lastMove == 'D') {
+            this.sprite.changeAnimation('deathD');
+        } else if (this.lastMove == 'U') {
+            this.sprite.changeAnimation('deathU');
+        } else {
+            this.sprite.changeAnimation('deathRL');
+        }
+    }
+    /////////////////////////////////////////////////////// END OF MUST FIX
     playerMove() {
         var moveUpKey = this.moveKeys[0];
         var moveDownKey = this.moveKeys[1];
@@ -166,14 +184,16 @@ class Player {
 
     loseLife() {
         this.lives -= 1;
-        this.sprite.position.x = this.initialX;
-        this.sprite.position.y = this.initialY;
-        this.lastMove = 'D';
-        this.shadow.position.x = this.sprite.position.x; 
-        this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
+        if (this.lives!=0) {     // We don't want him to respawn if he is out of lives
+            this.sprite.position.x = this.initialX;
+            this.sprite.position.y = this.initialY;
+            this.lastMove = 'D';
+            this.shadow.position.x = this.sprite.position.x; 
+            this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
+        }        
     }
 
-    stop(){
+    stop() {
         if (this.lastMove == 'R'){
             this.sprite.position.x -= this.moveSpeed;
             this.shadow.position.x = this.sprite.position.x;
