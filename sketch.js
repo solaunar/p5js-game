@@ -90,7 +90,7 @@ function draw() {
   clear();
   background(32);
 
-  if(keyDown('SPACE')){
+  if(keyWentUp('SPACE')){
     stage ++;
   }
 
