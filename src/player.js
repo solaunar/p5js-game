@@ -41,7 +41,7 @@ class Player {
         } else {
             textSize(50);
             fill(255);
-            text(this.dieMessage, 250, 200);
+            text(this.dieMessage, width/2-250, height/2-280); 
         }
     }
 
@@ -109,7 +109,7 @@ class Player {
         }
     }
     ////////////////////////////////////////////////////////////// MUST FIX
-    
+
     switchDeath() {       // He keeps dying eternally
         if (this.lastMove == 'D') {
             this.sprite.changeAnimation('deathD');

@@ -101,17 +101,15 @@ function draw() {
     }    
     image(startImg, width/2-320, height/2-320, 640, 640); // Load image in center
   } 
-
   //Prologue
   if (stage == 1){    
     scene1.position(width/2-320, height/2-240);          // Load gif in center
     textSize(25);
     fill(255);
     text("Script goes Here", width/2-320, height/2+280); // Script is under the gif
-  }
-  
+  }  
   //Level
-  if (stage == 2){
+  if (stage > 1) {
     song1.stop();                                         // Stop song 1
     scene1.position(-1000,-1000);                         // Move gif out of frame
     if(!song2.isPlaying()){                               // Play song 2
