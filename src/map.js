@@ -6,6 +6,7 @@ class Map{
         this.items = [];
         this.scale = scale;
         this.tilesSprites = new Group();
+        this.doors = new Group();
         this.walls = new Group();
         this.hazards = new Group();
         this.floor = new Group();
@@ -18,9 +19,13 @@ class Map{
     drawMap(){
         drawSprites(this.hazards);
         drawSprites(this.treasures);
-        drawSprites(this.walls);
         drawSprites(this.floor);
         drawSprites(this.skeletons);
+        drawSprites(this.walls);
+    }
+
+    drawDoors(){
+        drawSprites(this.doors);
     }
 
     drawItems(){
@@ -49,6 +54,8 @@ class Map{
                     this.walls.add(tile.sprite);
                 } else if (tileTitle.startsWith("pit")) {
                     this.hazards.add(tile.sprite);
+                } else if (tileTitle.startsWith("door")){
+                    this.doors.add(tile.sprite);
                 } else {
                     this.floor.add(tile.sprite);
                 }

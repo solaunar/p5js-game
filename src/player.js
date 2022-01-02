@@ -49,6 +49,9 @@ class Player {
                 this.canLevitate = true;
                 levitationExpire = time + 20*animationSeconds;
             }
+            if (this.sprite.overlap(gameMap.lives, this.getLife)){
+                this.lives += 1;
+            }
             if (time >= levitationExpire){
                 this.canLevitate = false;
             }
@@ -226,6 +229,9 @@ class Player {
         }
 
         if (keyDown(attackKey)) {
+            if(!songFire.isPlaying()){
+                songFire.play(0, 1.2);
+            }
             this.switchAttack();
         }
     }
@@ -289,6 +295,12 @@ class Player {
     }
 
     getPotion(player, potion){
+        songPotion.play();
         potion.remove();
+    }
+
+    getLife(player, life){
+        songHeart.play();
+        life.remove();
     }
 }
