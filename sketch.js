@@ -1,81 +1,112 @@
 var player1;
 var imagesPath = 'assets/images/';
 var tileset;
+var status1;
 var gameMap;
 var walls;
 var floor;
 var hazards;
-var song;
-
-var tiles = {
-  01: [0, 0, "wall_1"],
-  02: [0, 1, "side_2"],
-  03: [0, 2, "side_3"],
-  04: [0, 3, "side_4"],
-  05: [0, 4, "wall_5"],
-  06: [0, 5, "pot"],
-  07: [0, 6, "coins"],
-  08: [0, 7, "potion"],
-  09: [1, 0, "wall_6"],
-  10: [1, 1, "wall_7"],
-  11: [1, 2, "wall_8"],
-  12: [1, 3, "wall_9"],
-  13: [1, 4, "wall_11"],
-  14: [1, 5, "wall_12"],
-  15: [1, 6, "brick"],
-  16: [1, 7, "barrel"],
-  17: [2, 0, "side_5"],
-  18: [2, 1, "side_6"],
-  19: [2, 2, "door_closed"],
-  20: [2, 3, "door_open"],
-  21: [2, 4, "side_7"],
-  22: [2, 5, "side_8"],
-  23: [2, 6, "heart"],
-  24: [2, 7, "chest"],
-  25: [3, 0, "floor_1"],
-  26: [3, 1, "floor_2"],
-  27: [3, 2, "floor_3"],
-  28: [3, 3, "floor_4"],
-  29: [3, 4, "pit_1"],
-  30: [3, 5, "pit_2"],
-  31: [3, 6, "skeleton_dead"],
-  32: [3, 7, "skeleton_alive"]
-}
-
-var lvl =[
-  [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
-  [10, 03, 22, 03, 03, 03, 03, 03, 03, 03, 03, 03, 03, 22, 03, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 25, 26, 26, 30, 30, 30, 30, 30, 30, 30, 30, 26, 26, 26, 10],
-  [10, 25, 26, 30, 26, 26, 26, 26, 26, 26, 26, 26, 30, 26, 26, 10],
-  [10, 25, 26, 26, 30, 30, 30, 26, 26, 30, 30, 30, 26, 26, 26, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
-];
+var song1;
+var song2;
+var songDeath;
+var alagardFont;
+var stage = 0;
+var drawTimes = 0;
+var animationSeconds = 500;
+var deathToIdle = animationSeconds;
+var respawnToIdle = animationSeconds;
+var tiles;
+var levels;
+var lvl;
 
 function preload() {
+  tiles = loadJSON(imagesPath + 'tiles/tiles.json');
+  levels = loadJSON('./assets/levels.json');
   tileset = loadImage(imagesPath + 'tiles/dungeon-tileset-full.png');
-  song = loadSound('./assets/sound/tracks/BloodyTears.wav');
+  song1 = loadSound('./assets/sound/tracks/CharacterEncounter.wav');
+  song2 = loadSound('./assets/sound/tracks/MessageOfDarkness.wav');
+  songDeath = loadSound('./assets/sound/tracks/SweetDeath.wav');
+  alagardFont = loadFont('./assets/fonts/alagard.ttf');
+  scene1 = loadGif('./assets/images/scene1.gif');    
+  scene2 = loadGif('./assets/images/scene2.gif');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  song.setLoop(true);
-  song.setVolume(0.20);
+  startImg = loadImage("./assets/images/start.png");
+  song1.setLoop(true);
+  song1.setVolume(0.20);
+  song2.setLoop(true);
+  song2.setVolume(0.20);
+  lvl = levels["1"];
   gameMap = new Map(lvl, 2.5);
   walls = gameMap.walls;
   floor = gameMap.floor;
   hazards = gameMap.hazards;
-  player1 = new Player(width/2, height/2, 64, 64, 2, 7, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
+  player1 = new Player(width/2, height/2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
+  status1 = new Status(player1, "LVL - 1");
+  status1.setUp();
   gameMap.createSprites();
+  textFont(alagardFont);
 }
 
 function draw() {
-  if(song.isPlaying()==false){song.play()}
   background(32);
-  gameMap.draw();
-  player1.draw();
-  player1.update();
+  drawTimes += 1;
+
+  if(keyWentUp('SPACE')){
+    stage ++;
+  }
+
+  fill("#4a1856");
+  noStroke();
+  rect(width/2 - 320, height/2 - 240, 640, 550);
+
+  //Start Screen
+  if (stage == 0){
+    startScreen();
+  }  
+  //Level
+  if (stage >= 1) {
+    song1.stop();                                         // Stop song 1
+    if(!song2.isPlaying() && !songDeath.isPlaying()){                               // Play song 2
+      song2.play();
+    }                                                          
+    gameMap.draw();                                       //Draw map
+    player1.draw();
+    player1.update();
+    status1.draw();
+    status1.update(player1, 'LVL - 1');
+  }  
+}
+
+
+function startScreen(){
+
+  if(!song1.isPlaying()){
+    song1.play();
+  }    
+  image(scene1, width/2-320, height/2-240);
+  
+  textStyle(BOLD);
+  textSize(64);
+  fill("#7e93d2");
+  text("Lilin", width/2 - 235, height/2 - 195, 640, 120);
+  fill(255);
+  text("Lilin", width/2 - 240, height/2 - 200, 640, 120);
+  textStyle(NORMAL);
+  textSize(48);
+  fill(210);
+  text("Pursuit of Truth", width/2-280, height/2 - 130, 640, 120);
+
+  if(frameCount%60 < 30){
+    fill("#4a1856");
+  }else{
+    fill(255);
+  }
+  stroke("#7e93d2");
+  strokeWeight(5);
+  textAlign(CENTER, CENTER);
+  text("PRESS SPACE TO START", width/2, height/2 + 270);
+
 }
