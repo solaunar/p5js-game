@@ -80,7 +80,7 @@ function draw() {
     stage++;
   }
 
-  fill("#4a1856");
+  fill(66,25,93);
   noStroke();
   rect(width / 2 - 320, height / 2 - 240, 640, 550);
 
@@ -128,7 +128,7 @@ function startScreen() {
   text("Pursuit of Truth", width / 2 - 280, height / 2 - 130, 640, 120);
 
   if (frameCount % 60 < 30) {
-    fill("#4a1856");
+    fill(66,25,93);
   } else {
     fill(255);
   }
