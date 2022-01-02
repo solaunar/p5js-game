@@ -4,23 +4,27 @@ class Status{
         this.coins = player.coins;
         this.level = level;
         this.canLevitate = player.canLevitate;
-        this.size = 16* 2.5;
-        this.bufferx = (windowWidth-(14*this.size))/2+this.size /2;  //width minus half the map plus half a tile to center
-        this.buffery = (windowHeight-(13*this.size))/2+this.size /2 - this.size ; 
+        this.size = 16* 3;
+        this.bufferx = width/2 - 260;
+        this.buffery = height/2 + 275;
         this.infoTiles = new Group();
     }
 
     draw(){
-        this.bufferx = (windowWidth-(14*this.size))/2+this.size/2;  //width minus half the map plus half a tile to center
-        this.buffery = (windowHeight-(13*this.size))/2+this.size/2 - this.size*1.3; 
-        this.bufferx += this.size/ 2;
-        textSize(22);
-        stroke('#a12926');
-        strokeWeight(4);
-        textAlign('LEFT', 'TOP');
-        fill(0, 0, 0, 255);
-        text(': ' + this.lives, this.bufferx, this.buffery, this.size, this.size);
+        this.bufferx = width/2 - 260;
+        this.buffery = height/2 + 275;
+        this.bufferx += this.size;
+        textSize(32);
         drawSprites(this.infoTiles);
+        textAlign(CENTER, CENTER);
+        stroke("#7e93d2");
+        strokeWeight(5);
+        fill(32);
+        text(': ' + this.lives, this.bufferx, this.buffery - 5);
+        this.bufferx += 3* this.size;
+        text(': ' + this.coins, this.bufferx, this.buffery - 5);
+        this.bufferx += 6* this.size;
+        text(this.level, this.bufferx, this.buffery - 5);
     }
 
     update(player, level){
@@ -32,9 +36,9 @@ class Status{
 
     setUp(){
         var heartTileIndex = tiles[23]
-        this.infoTiles.add(new Tile(heartTileIndex[2], heartTileIndex, 2.5, this.bufferx, this.buffery).sprite);
+        this.infoTiles.add(new Tile(heartTileIndex[2], heartTileIndex, 3, this.bufferx, this.buffery).sprite);
 
         var coinTileIndex = tiles[7];
-        this.infoTiles.add(new Tile(coinTileIndex[2], coinTileIndex, 2.5, this.bufferx + 2* this.size, this.buffery + 2* this.size).sprite);
+        this.infoTiles.add(new Tile(coinTileIndex[2], coinTileIndex, 3, this.bufferx + 3* this.size, this.buffery).sprite);
     }
 }
