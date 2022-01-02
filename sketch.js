@@ -10,58 +10,13 @@ var song2;
 var alagardFont;
 var stage = 0;
 var drawTimes = 0;
-
-var tiles = {
-  01: [0, 0, "wall_1"],
-  02: [0, 1, "side_2"],
-  03: [0, 2, "side_3"],
-  04: [0, 3, "side_4"],
-  05: [0, 4, "wall_5"],
-  06: [0, 5, "pot"],
-  07: [0, 6, "coins"],
-  08: [0, 7, "potion"],
-  09: [1, 0, "wall_6"],
-  10: [1, 1, "wall_7"],
-  11: [1, 2, "wall_8"],
-  12: [1, 3, "wall_9"],
-  13: [1, 4, "wall_11"],
-  14: [1, 5, "wall_12"],
-  15: [1, 6, "brick"],
-  16: [1, 7, "barrel"],
-  17: [2, 0, "side_5"],
-  18: [2, 1, "side_6"],
-  19: [2, 2, "door_closed"],
-  20: [2, 3, "door_open"],
-  21: [2, 4, "side_7"],
-  22: [2, 5, "side_8"],
-  23: [2, 6, "heart"],
-  24: [2, 7, "chest"],
-  25: [3, 0, "floor_1"],
-  26: [3, 1, "floor_2"],
-  27: [3, 2, "floor_3"],
-  28: [3, 3, "floor_4"],
-  29: [3, 4, "pit_1"],
-  30: [3, 5, "pit_2"],
-  31: [3, 6, "skeleton_dead"],
-  32: [3, 7, "skeleton_alive"]
-}
-
-var lvl =[
-  [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
-  [10, 03, 22, 03, 03, 03, 03, 03, 03, 03, 03, 03, 03, 22, 03, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 25, 26, 26, 30, 30, 30, 30, 30, 30, 30, 30, 26, 26, 26, 10],
-  [10, 25, 26, 30, 26, 26, 26, 26, 26, 26, 26, 26, 30, 26, 26, 10],
-  [10, 25, 26, 26, 30, 30, 30, 26, 26, 30, 30, 30, 26, 26, 26, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 25, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 10],
-  [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
-];
+var tiles;
+var levels;
+var lvl;
 
 function preload() {
+  tiles = loadJSON(imagesPath + 'tiles/tiles.json');
+  levels = loadJSON('./assets/levels.json');
   tileset = loadImage(imagesPath + 'tiles/dungeon-tileset-full.png');
   song1 = loadSound('./assets/sound/tracks/CharacterEncounter.wav');
   song2 = loadSound('./assets/sound/tracks/MessageOfDarkness.wav');
@@ -73,11 +28,11 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   startImg = loadImage("./assets/images/start.png");
-
   song1.setLoop(true);
   song1.setVolume(0.20);
   song2.setLoop(true);
   song2.setVolume(0.20);
+  lvl = levels["1"];
   gameMap = new Map(lvl, 2.5);
   walls = gameMap.walls;
   floor = gameMap.floor;
@@ -88,7 +43,6 @@ function setup() {
 }
 
 function draw() {
-  clear();
   background(32);
   drawTimes += 1;
 
@@ -96,8 +50,9 @@ function draw() {
     stage ++;
   }
 
-  //Start Screen
-    //image(startImg, width/2-320, height/2-320, 640, 640); // Load image in center
+  fill("#4a1856");
+  rect(width/2 - 320, height/2 - 240, 640, 550);
+
   //Start Screen
   if (stage == 0){
 
@@ -113,18 +68,17 @@ function draw() {
     fill(255);
     text("Lilin", width/2 - 240, height/2 - 200, 640, 120);
     textStyle(NORMAL);
-    textSize(32);
+    textSize(48);
     fill(210);
     text("Pursuit of Truth", width/2-280, height/2 - 130, 640, 120);
-    fill(0);
-    rect(width/2 - 320, height/2 + 240, 640, 70);
 
     if(frameCount%60 < 30){
-      fill(255);
+      fill("#797dc6");
     }else{
-      fill(0);
+      fill(255);
     }
-    text("PRESS SPACE TO START", width/2 -180, height/2 + 280);
+    textAlign(CENTER, CENTER);
+    text("PRESS SPACE TO START", width/2, height/2 + 270);
   }  
   //Level
   if (stage >= 1) {

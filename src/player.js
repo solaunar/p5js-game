@@ -41,10 +41,9 @@ class Player {
         } else {
             textSize(50);
             fill(255);
-            text(this.dieMessage, width/2-250, height/2-280);
-            //this.switchDeath();
+            textAlign(CENTER);
+            text(this.dieMessage, width/2, height/2-280);
             this.switchDead();
-
         }
     }
 
@@ -110,30 +109,15 @@ class Player {
             this.sprite.changeAnimation('attackRL');
         }
     }
-    ////////////////////////////////////////////////////////////// MUST FIX
 
-    // switchDeath() {       // He keeps dying eternally
-    //     for (let i=0; i<7; i++){
-    //         if (this.lastMove == 'D') {
-    //             this.sprite.changeAnimation('deathD');
-    //         } else if (this.lastMove == 'U') {
-    //             this.sprite.changeAnimation('deathU');
-    //         } else {
-    //             this.sprite.changeAnimation('deathRL');
-    //         }
-    //     }        
-    // }
-
-    switchDead() {          // Idle Dead
-        for (let i=0; i<7; i++){
-            if (this.lastMove == 'D') {
-                this.sprite.changeAnimation('deadD');
-            } else if (this.lastMove == 'U') {
-                this.sprite.changeAnimation('deadU');
-            } else {
-                this.sprite.changeAnimation('deadRL');
-            }
-        }        
+    switchDead() {
+        if (this.lastMove == 'D') {
+            this.sprite.changeAnimation('deadD');
+        } else if (this.lastMove == 'U') {
+            this.sprite.changeAnimation('deadU');
+        } else {
+            this.sprite.changeAnimation('deadRL');
+        } 
     }
     /////////////////////////////////////////////////////// END OF MUST FIX
     playerMove() {
