@@ -6,6 +6,7 @@ var gameMap;
 var walls;
 var floor;
 var hazards;
+var treasures;
 var song1;
 var song2;
 var songDeath;
@@ -26,6 +27,7 @@ function preload() {
   song1 = loadSound('./assets/sound/tracks/CharacterEncounter.wav');
   song2 = loadSound('./assets/sound/tracks/MessageOfDarkness.wav');
   songDeath = loadSound('./assets/sound/tracks/SweetDeath.wav');
+  songOof = loadSound('./assets/sound/SFX/scream.mp3');
   alagardFont = loadFont('./assets/fonts/alagard.ttf');
   scene1 = loadGif('./assets/images/scene1.gif');    
   scene2 = loadGif('./assets/images/scene2.gif');
@@ -43,6 +45,7 @@ function setup() {
   walls = gameMap.walls;
   floor = gameMap.floor;
   hazards = gameMap.hazards;
+  treasures = gameMap.treasures;
   player1 = new Player(width/2, height/2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
   status1 = new Status(player1, "LVL - 1");
   status1.setUp();
@@ -69,7 +72,7 @@ function draw() {
   //Level
   if (stage >= 1) {
     song1.stop();                                         // Stop song 1
-    if(!song2.isPlaying() && !songDeath.isPlaying()){                               // Play song 2
+    if(!song2.isPlaying() && !songDeath.isPlaying()){     // Play song 2
       song2.play();
     }                                                          
     gameMap.draw();                                       //Draw map

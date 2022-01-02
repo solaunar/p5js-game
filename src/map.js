@@ -6,11 +6,13 @@ class Map{
         this.tilesSprites = new Group();
         this.walls = new Group();
         this.hazards = new Group();
+        this.treasures = new Group();
         this.floor = new Group();
     }
 
     draw(){
         drawSprites(this.hazards);
+        drawSprites(this.treasures);
         drawSprites(this.walls);
         drawSprites(this.floor);
     }
@@ -34,6 +36,8 @@ class Map{
                     this.walls.add(tile.sprite);
                 } else if (tileTitle.startsWith("pit")) {
                     this.hazards.add(tile.sprite);
+                } else if (tileTitle.startsWith("coins")) {
+                    this.treasures.add(tile.sprite);
                 } else {
                     this.floor.add(tile.sprite);
                 }
