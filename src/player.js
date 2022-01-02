@@ -19,6 +19,7 @@ class Player {
         this.sprite.setCollider("rectangle", 0, height / 2, 4, 4);
         this.shadow.setCollider("rectangle", 0, 0, 32, 16);
         this.addAnimations();
+        this.isAttacking = keyDown(moveKeys[4]);
         this.changeToIdleDeath = false;
     }
 
@@ -30,6 +31,7 @@ class Player {
     }
 
     update() {
+        var time = millis();
         if (this.isAlive()) {
             if(this.canMove()){
                 this.playerMove();
@@ -40,8 +42,23 @@ class Player {
             if (this.shadow.collide(walls)) {
                 this.stop();
             }
-            if (this.sprite.overlap(coins, this.getCoins)){
+            if (this.sprite.overlap(gameMap.coins, this.getCoins)){
                 this.coins += 10;
+            }
+            if (this.sprite.overlap(gameMap.potions, this.getPotion)){
+                this.canLevitate = true;
+                levitationExpire = time + 10*animationSeconds;
+            }
+            if (time >= levitationExpire){
+                this.canLevitate = false;
+            }
+            if (this.shadow.overlap(gameMap.skeletons)){
+                if(this.isAttacking){
+                    this.shadow.overlap(gameMap.skeletons, this.rekSkel);
+                    this.coins += 100;
+                } else {
+                    this.loseLife();
+                }
             }
         } else {
             textSize(50);
@@ -50,7 +67,6 @@ class Player {
             strokeWeight(5);
             textAlign(CENTER);
             text(this.dieMessage, width / 2, height / 2 - 280);
-            var time = millis();
             song2.stop();
             if (!songDeath.isPlaying() && !this.changeToIdleDeath) {
                 songDeath.play();
@@ -159,9 +175,10 @@ class Player {
         var attackKey = this.moveKeys[4];
         var jumpKey = this.moveKeys[5];
 
+        this.isAttacking = keyDown(attackKey);
         if (keyDown(jumpKey) && this.canLevitate) {
             this.sprite.scale = this.scale + 0.3;
-            this.shadow.scale = this.shadowScale + 0.05 * this.shadow;
+            this.shadow.scale = this.shadowScale + 0.05 * this.shadowScale;
             this.sprite.position.y = this.shadow.position.y - (20 * this.scale) - (15 * this.shadow.scale);
         } else {
             this.sprite.scale = this.scale;
@@ -229,6 +246,10 @@ class Player {
         }
     }
 
+    rekSkel(player, skeleton) {
+        skeleton.remove();
+    }
+
     canMove(){
         if(millis() <= respawnToIdle){
             textSize(50);
@@ -260,5 +281,9 @@ class Player {
 
     getCoins(player, coin){
         coin.remove();
+    }
+
+    getPotion(player, potion){
+        potion.remove();
     }
 }

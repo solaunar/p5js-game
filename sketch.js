@@ -19,6 +19,7 @@ var drawTimes = 0;
 var animationSeconds = 500;
 var deathToIdle = animationSeconds;
 var respawnToIdle = animationSeconds;
+var levitationExpire = animationSeconds;
 var tiles;
 var levels;
 var lvl;
