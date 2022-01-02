@@ -8,9 +8,13 @@ var floor;
 var hazards;
 var song1;
 var song2;
+var songDeath;
 var alagardFont;
 var stage = 0;
 var drawTimes = 0;
+var animationSeconds = 500;
+var deathToIdle = animationSeconds;
+var respawnToIdle = animationSeconds;
 var tiles;
 var levels;
 var lvl;
@@ -21,6 +25,7 @@ function preload() {
   tileset = loadImage(imagesPath + 'tiles/dungeon-tileset-full.png');
   song1 = loadSound('./assets/sound/tracks/CharacterEncounter.wav');
   song2 = loadSound('./assets/sound/tracks/MessageOfDarkness.wav');
+  songDeath = loadSound('./assets/sound/tracks/SweetDeath.wav');
   alagardFont = loadFont('./assets/fonts/alagard.ttf');
   scene1 = loadGif('./assets/images/scene1.gif');    
   scene2 = loadGif('./assets/images/scene2.gif');
@@ -59,37 +64,12 @@ function draw() {
 
   //Start Screen
   if (stage == 0){
-
-    if(!song1.isPlaying()){
-      song1.play();
-    }    
-    image(scene1, width/2-320, height/2-240);
-    
-    textStyle(BOLD);
-    textSize(64);
-    fill("#7e93d2");
-    text("Lilin", width/2 - 235, height/2 - 195, 640, 120);
-    fill(255);
-    text("Lilin", width/2 - 240, height/2 - 200, 640, 120);
-    textStyle(NORMAL);
-    textSize(48);
-    fill(210);
-    text("Pursuit of Truth", width/2-280, height/2 - 130, 640, 120);
-
-    if(frameCount%60 < 30){
-      fill("#4a1856");
-    }else{
-      fill(255);
-    }
-    stroke("#7e93d2");
-    strokeWeight(5);
-    textAlign(CENTER, CENTER);
-    text("PRESS SPACE TO START", width/2, height/2 + 270);
+    startScreen();
   }  
   //Level
   if (stage >= 1) {
     song1.stop();                                         // Stop song 1
-    if(!song2.isPlaying()){                               // Play song 2
+    if(!song2.isPlaying() && !songDeath.isPlaying()){                               // Play song 2
       song2.play();
     }                                                          
     gameMap.draw();                                       //Draw map
@@ -101,3 +81,32 @@ function draw() {
 }
 
 
+function startScreen(){
+
+  if(!song1.isPlaying()){
+    song1.play();
+  }    
+  image(scene1, width/2-320, height/2-240);
+  
+  textStyle(BOLD);
+  textSize(64);
+  fill("#7e93d2");
+  text("Lilin", width/2 - 235, height/2 - 195, 640, 120);
+  fill(255);
+  text("Lilin", width/2 - 240, height/2 - 200, 640, 120);
+  textStyle(NORMAL);
+  textSize(48);
+  fill(210);
+  text("Pursuit of Truth", width/2-280, height/2 - 130, 640, 120);
+
+  if(frameCount%60 < 30){
+    fill("#4a1856");
+  }else{
+    fill(255);
+  }
+  stroke("#7e93d2");
+  strokeWeight(5);
+  textAlign(CENTER, CENTER);
+  text("PRESS SPACE TO START", width/2, height/2 + 270);
+
+}

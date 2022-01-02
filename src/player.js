@@ -16,26 +16,28 @@ class Player {
         this.shadow = this.addShadow();
         this.canLevitate = false;
         this.dieMessage = "YOU DIED IDIOT SHINJI";
-        this.sprite.setCollider("rectangle", 0, height/2, 4, 4);
+        this.sprite.setCollider("rectangle", 0, height / 2, 4, 4);
         this.shadow.setCollider("rectangle", 0, 0, 32, 16);
         this.addAnimations();
+        this.changeToIdleDeath = false;
     }
 
-    draw(){
+    draw() {
         tint(255, 160);
         drawSprite(this.shadow);
         tint(255, 255);
         drawSprite(this.sprite);
     }
 
-    update(){
-        if (this.isAlive()){
-            this.playerMove();
-            if (this.sprite.overlap(hazards)){
-                this.loseLife();
-                console.log(this.lives);
+    update() {
+        if (this.isAlive()) {
+            if(this.canMove()){
+                this.playerMove();
             }
-            if (this.shadow.collide(walls)){
+            if (this.sprite.overlap(hazards)) {
+                this.loseLife();
+            }
+            if (this.shadow.collide(walls)) {
                 this.stop();
             }
         } else {
@@ -44,8 +46,21 @@ class Player {
             stroke("#7e93d2");
             strokeWeight(5);
             textAlign(CENTER);
-            text(this.dieMessage, width/2, height/2-280);
-            this.switchDead();
+            text(this.dieMessage, width / 2, height / 2 - 280);
+            var time = millis();
+            song2.stop();
+            if (!songDeath.isPlaying() && !this.changeToIdleDeath) {
+                songDeath.play();
+            }
+            if (time >= deathToIdle && this.changeToIdleDeath) {
+                this.switchDead();
+            } else {
+                if (!this.changeToIdleDeath) {
+                    deathToIdle = time + animationSeconds;
+                    this.switchDeath();
+                    this.changeToIdleDeath = true;
+                }
+            }
         }
     }
 
@@ -60,6 +75,7 @@ class Player {
 
     addAnimations() {
         this.addSingleAnimation('D', 'idleD', 1);
+        this.addSingleAnimation('D', 'spellcastD', 14);
         this.addSingleAnimation('D', 'deadD', 1);
         this.addSingleAnimation('D', 'walkD', 6);
         this.addSingleAnimation('D', 'attackD', 9);
@@ -112,6 +128,16 @@ class Player {
         }
     }
 
+    switchDeath() {
+        if (this.lastMove == 'D') {
+            this.sprite.changeAnimation('deathD');
+        } else if (this.lastMove == 'U') {
+            this.sprite.changeAnimation('deathU');
+        } else {
+            this.sprite.changeAnimation('deathRL');
+        }
+    }
+
     switchDead() {
         if (this.lastMove == 'D') {
             this.sprite.changeAnimation('deadD');
@@ -119,7 +145,7 @@ class Player {
             this.sprite.changeAnimation('deadU');
         } else {
             this.sprite.changeAnimation('deadRL');
-        } 
+        }
     }
     /////////////////////////////////////////////////////// END OF MUST FIX
     playerMove() {
@@ -132,24 +158,24 @@ class Player {
 
         if (keyDown(jumpKey) && this.canLevitate) {
             this.sprite.scale = this.scale + 0.3;
-            this.shadow.scale = this.shadowScale + 0.05* this.shadow;
-            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) - (15*this.shadow.scale);
+            this.shadow.scale = this.shadowScale + 0.05 * this.shadow;
+            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) - (15 * this.shadow.scale);
         } else {
             this.sprite.scale = this.scale;
             this.shadow.scale = this.shadowScale;
-            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) + (2**this.shadow.scale);
+            this.sprite.position.y = this.shadow.position.y - (20 * this.scale) + (2 ** this.shadow.scale);
         }
 
         if (keyDown(moveUpKey)) {
-            if (this.sprite.position.y > (this.height/2) ){
+            if (this.sprite.position.y > (this.height / 2)) {
                 this.sprite.changeAnimation('walkU');
                 this.sprite.position.y -= this.moveSpeed;
                 this.shadow.position.y -= this.moveSpeed;
                 this.lastMove = 'U';
-            }            
+            }
         }
         else if (keyDown(moveDownKey)) {
-            if (this.sprite.position.y < windowHeight-(this.height/2)){
+            if (this.sprite.position.y < windowHeight - (this.height / 2)) {
                 this.sprite.changeAnimation('walkD');
                 this.sprite.position.y += this.moveSpeed;
                 this.shadow.position.y += this.moveSpeed;
@@ -157,7 +183,7 @@ class Player {
             }
         }
         else if (keyDown(moveLeftKey)) {
-            if (this.sprite.position.x > (this.width/2)){
+            if (this.sprite.position.x > (this.width / 2)) {
                 this.sprite.changeAnimation('walkRL');
                 this.sprite.mirrorX(-1);
                 this.sprite.position.x -= this.moveSpeed;
@@ -167,7 +193,7 @@ class Player {
             }
         }
         else if (keyDown(moveRightKey)) {
-            if (this.sprite.position.x < windowWidth-(this.height/2)){
+            if (this.sprite.position.x < windowWidth - (this.height / 2)) {
                 this.sprite.changeAnimation('walkRL');
                 this.sprite.mirrorX(1);
                 this.sprite.position.x += this.moveSpeed;
@@ -186,26 +212,41 @@ class Player {
 
     loseLife() {
         this.lives -= 1;
-        if (this.lives!=0) {     // We don't want him to respawn if he is out of lives
+        if (this.lives != 0) {     // We don't want him to respawn if he is out of lives
             this.sprite.position.x = this.initialX;
             this.sprite.position.y = this.initialY;
             this.lastMove = 'D';
-            this.shadow.position.x = this.sprite.position.x; 
+            this.shadow.position.x = this.sprite.position.x;
             this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
-        }        
+            this.sprite.changeAnimation('spellcastD');
+            respawnToIdle = millis() + 2*animationSeconds;
+        }
+    }
+
+    canMove(){
+        if(millis() <= respawnToIdle){
+            textSize(50);
+            fill("#4a1856");
+            stroke("#7e93d2");
+            strokeWeight(5);
+            textAlign(CENTER);
+            text('Be careful, you lost a life...', width / 2, height / 2 - 280);
+            return false;
+        }
+        return true;
     }
 
     stop() {
-        if (this.lastMove == 'R'){
+        if (this.lastMove == 'R') {
             this.sprite.position.x -= this.moveSpeed;
             this.shadow.position.x = this.sprite.position.x;
-        } else if (this.lastMove == 'L'){
+        } else if (this.lastMove == 'L') {
             this.sprite.position.x += this.moveSpeed;
             this.shadow.position.x = this.sprite.position.x;
-        } else if(this.lastMove == 'U'){
+        } else if (this.lastMove == 'U') {
             this.sprite.position.y += this.moveSpeed;
             this.shadow.position.y += this.moveSpeed;
-        } else if(this.lastMove == 'D'){
+        } else if (this.lastMove == 'D') {
             this.sprite.position.y -= this.moveSpeed;
             this.shadow.position.y -= this.moveSpeed;
         }
