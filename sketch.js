@@ -12,6 +12,7 @@ var potions;
 var skeletons;
 var song1;
 var song2;
+var songCoin;
 var songDeath;
 var alagardFont;
 var stage = 0;
@@ -32,6 +33,7 @@ function preload() {
   song2 = loadSound('./assets/sound/tracks/MessageOfDarkness.wav');
   songDeath = loadSound('./assets/sound/tracks/SweetDeath.wav');
   songOof = loadSound('./assets/sound/SFX/scream.mp3');
+  songCoin = loadSound('./assets/sound/SFX/coin.wav')
   alagardFont = loadFont('./assets/fonts/alagard.ttf');
   scene1 = loadGif('./assets/images/scene1.gif');    
   scene2 = loadGif('./assets/images/scene2.gif');
@@ -44,6 +46,7 @@ function setup() {
   song1.setVolume(0.20);
   song2.setLoop(true);
   song2.setVolume(0.20);
+  songCoin.setVolume(0.05);
   lvl = levels["map_1"];
   gameMap = new Map(lvl, levels["items_1"], 2.5);
   player1 = new Player(width/2, height/2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);

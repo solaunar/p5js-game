@@ -23,7 +23,13 @@ class Status{
         text(': ' + this.lives, this.bufferx, this.buffery - 5);
         this.bufferx += 3* this.size;
         text(': ' + this.coins, this.bufferx, this.buffery - 5);
-        this.bufferx += 6* this.size;
+
+        this.bufferx += 3* this.size;
+        if(this.canLevitate && (levitationExpire - millis())/1000 >= 0){
+            text(': ' + Math.floor((levitationExpire - millis())/1000), this.bufferx, this.buffery - 5);
+        }
+
+        this.bufferx += 3* this.size;
         text(this.level, this.bufferx, this.buffery - 5);
     }
 
@@ -40,5 +46,8 @@ class Status{
 
         var coinTileIndex = tiles[7];
         this.infoTiles.add(new Tile(coinTileIndex[2], coinTileIndex, 3, this.bufferx + 3* this.size, this.buffery).sprite);
+
+        var potionTileIndex = tiles[8];
+        this.infoTiles.add(new Tile(potionTileIndex[2], potionTileIndex, 3, this.bufferx + 6* this.size, this.buffery).sprite);
     }
 }

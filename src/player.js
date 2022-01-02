@@ -36,7 +36,7 @@ class Player {
             if(this.canMove()){
                 this.playerMove();
             }
-            if (this.sprite.overlap(hazards)) {
+            if (this.sprite.overlap(hazards) && this.canFall()) {
                 this.loseLife();
             }
             if (this.shadow.collide(walls)) {
@@ -47,7 +47,7 @@ class Player {
             }
             if (this.sprite.overlap(gameMap.potions, this.getPotion)){
                 this.canLevitate = true;
-                levitationExpire = time + 10*animationSeconds;
+                levitationExpire = time + 20*animationSeconds;
             }
             if (time >= levitationExpire){
                 this.canLevitate = false;
@@ -263,6 +263,10 @@ class Player {
         return true;
     }
 
+    canFall(){
+        return !(this.canLevitate && keyDown(this.moveKeys[5]));
+    }
+
     stop() {
         if (this.lastMove == 'R') {
             this.sprite.position.x -= this.moveSpeed;
@@ -280,6 +284,7 @@ class Player {
     }
 
     getCoins(player, coin){
+        songCoin.play();
         coin.remove();
     }
 
