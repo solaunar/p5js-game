@@ -7,7 +7,9 @@ var floor;
 var hazards;
 var song1;
 var song2;
+var alagardFont;
 var stage = 0;
+var drawTimes = 0;
 
 var tiles = {
   01: [0, 0, "wall_1"],
@@ -63,15 +65,13 @@ function preload() {
   tileset = loadImage(imagesPath + 'tiles/dungeon-tileset-full.png');
   song1 = loadSound('./assets/sound/tracks/CharacterEncounter.wav');
   song2 = loadSound('./assets/sound/tracks/MessageOfDarkness.wav');
-  scene1 = createImg('./assets/images/scene1.gif');
-  scene2 = createImg('./assets/images/scene2.gif');
+  alagardFont = loadFont('./assets/fonts/alagard.ttf');
+  scene1 = loadGif('./assets/images/scene1.gif');    
+  scene2 = loadGif('./assets/images/scene2.gif');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
-  scene1.position(-1000, -1000);  // Load gifs out of frame
-  scene2.position(-1000, -1000);
   startImg = loadImage("./assets/images/start.png");
 
   song1.setLoop(true);
@@ -84,34 +84,51 @@ function setup() {
   hazards = gameMap.hazards;
   player1 = new Player(width/2, height/2, 64, 64, 2, 7, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
   gameMap.createSprites();
+  textFont(alagardFont);
 }
 
 function draw() {
   clear();
   background(32);
+  drawTimes += 1;
 
   if(keyWentUp('SPACE')){
     stage ++;
   }
 
   //Start Screen
-  if (stage == 0){  
+    //image(startImg, width/2-320, height/2-320, 640, 640); // Load image in center
+  //Start Screen
+  if (stage == 0){
+
     if(!song1.isPlaying()){
       song1.play();
     }    
-    image(startImg, width/2-320, height/2-320, 640, 640); // Load image in center
-  } 
-  //Prologue
-  if (stage == 1){    
-    scene1.position(width/2-320, height/2-240);          // Load gif in center
-    textSize(25);
+    image(scene1, width/2-320, height/2-240);
+    
+    textStyle(BOLD);
+    textSize(64);
+    fill("#2f4c5e");
+    text("Lilin", width/2 - 235, height/2 - 195, 640, 120);
     fill(255);
-    text("Script goes Here", width/2-320, height/2+280); // Script is under the gif
+    text("Lilin", width/2 - 240, height/2 - 200, 640, 120);
+    textStyle(NORMAL);
+    textSize(32);
+    fill(210);
+    text("Pursuit of Truth", width/2-280, height/2 - 130, 640, 120);
+    fill(0);
+    rect(width/2 - 320, height/2 + 240, 640, 70);
+
+    if(frameCount%60 < 30){
+      fill(255);
+    }else{
+      fill(0);
+    }
+    text("PRESS SPACE TO START", width/2 -180, height/2 + 280);
   }  
   //Level
-  if (stage > 1) {
+  if (stage >= 1) {
     song1.stop();                                         // Stop song 1
-    scene1.position(-1000,-1000);                         // Move gif out of frame
     if(!song2.isPlaying()){                               // Play song 2
       song2.play();
     }                                                          
