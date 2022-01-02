@@ -41,7 +41,10 @@ class Player {
         } else {
             textSize(50);
             fill(255);
-            text(this.dieMessage, width/2-250, height/2-280); 
+            text(this.dieMessage, width/2-250, height/2-280);
+            //this.switchDeath();
+            this.switchDead();
+
         }
     }
 
@@ -85,7 +88,6 @@ class Player {
     isAlive() {
         if (this.lives > 0)
             return true;
-        this.switchDeath();
         return false;
     }
 
@@ -110,14 +112,28 @@ class Player {
     }
     ////////////////////////////////////////////////////////////// MUST FIX
 
-    switchDeath() {       // He keeps dying eternally
-        if (this.lastMove == 'D') {
-            this.sprite.changeAnimation('deathD');
-        } else if (this.lastMove == 'U') {
-            this.sprite.changeAnimation('deathU');
-        } else {
-            this.sprite.changeAnimation('deathRL');
-        }
+    // switchDeath() {       // He keeps dying eternally
+    //     for (let i=0; i<7; i++){
+    //         if (this.lastMove == 'D') {
+    //             this.sprite.changeAnimation('deathD');
+    //         } else if (this.lastMove == 'U') {
+    //             this.sprite.changeAnimation('deathU');
+    //         } else {
+    //             this.sprite.changeAnimation('deathRL');
+    //         }
+    //     }        
+    // }
+
+    switchDead() {          // Idle Dead
+        for (let i=0; i<7; i++){
+            if (this.lastMove == 'D') {
+                this.sprite.changeAnimation('deadD');
+            } else if (this.lastMove == 'U') {
+                this.sprite.changeAnimation('deadU');
+            } else {
+                this.sprite.changeAnimation('deadRL');
+            }
+        }        
     }
     /////////////////////////////////////////////////////// END OF MUST FIX
     playerMove() {
