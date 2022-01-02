@@ -6,6 +6,10 @@ var gameMap;
 var walls;
 var floor;
 var hazards;
+var coins;
+var lives;
+var potions;
+var skeletons;
 var song1;
 var song2;
 var songDeath;
@@ -38,15 +42,20 @@ function setup() {
   song1.setVolume(0.20);
   song2.setLoop(true);
   song2.setVolume(0.20);
-  lvl = levels["1"];
-  gameMap = new Map(lvl, 2.5);
-  walls = gameMap.walls;
-  floor = gameMap.floor;
-  hazards = gameMap.hazards;
+  lvl = levels["map_1"];
+  gameMap = new Map(lvl, levels["items_1"], 2.5);
   player1 = new Player(width/2, height/2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
   status1 = new Status(player1, "LVL - 1");
   status1.setUp();
-  gameMap.createSprites();
+  gameMap.createMap();
+  gameMap.createItems();
+  walls = gameMap.walls;
+  floor = gameMap.floor;
+  hazards = gameMap.hazards;
+  coins = gameMap.coins;
+  lives = gameMap.lives;
+  potions = gameMap.potions;
+  skeletons = gameMap.skeletons;
   textFont(alagardFont);
 }
 
@@ -72,7 +81,8 @@ function draw() {
     if(!song2.isPlaying() && !songDeath.isPlaying()){                               // Play song 2
       song2.play();
     }                                                          
-    gameMap.draw();                                       //Draw map
+    gameMap.drawMap();
+    gameMap.drawItems();                                       //Draw map
     player1.draw();
     player1.update();
     status1.draw();

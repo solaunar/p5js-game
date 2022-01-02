@@ -40,6 +40,9 @@ class Player {
             if (this.shadow.collide(walls)) {
                 this.stop();
             }
+            if (this.sprite.overlap(coins, this.getCoins)){
+                this.coins += 10;
+            }
         } else {
             textSize(50);
             fill("#4a1856");
@@ -250,5 +253,9 @@ class Player {
             this.sprite.position.y -= this.moveSpeed;
             this.shadow.position.y -= this.moveSpeed;
         }
+    }
+
+    getCoins(player, coin){
+        coin.remove();
     }
 }
