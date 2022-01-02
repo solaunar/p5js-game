@@ -150,7 +150,7 @@ class Player {
             this.sprite.changeAnimation('deadRL');
         }
     }
-    /////////////////////////////////////////////////////// END OF MUST FIX
+
     playerMove() {
         var moveUpKey = this.moveKeys[0];
         var moveDownKey = this.moveKeys[1];
@@ -215,13 +215,16 @@ class Player {
 
     loseLife() {
         this.lives -= 1;
+        if (!songOof.isPlaying() && !this.changeToIdleDeath) {
+            songOof.play();
+        }
         if (this.lives != 0) {     // We don't want him to respawn if he is out of lives
             this.sprite.position.x = this.initialX;
             this.sprite.position.y = this.initialY;
             this.lastMove = 'D';
             this.shadow.position.x = this.sprite.position.x;
             this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
-            this.sprite.changeAnimation('spellcastD');
+            this.sprite.changeAnimation('spellcastD');           
             respawnToIdle = millis() + 2*animationSeconds;
         }
     }

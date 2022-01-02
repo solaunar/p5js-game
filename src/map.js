@@ -17,6 +17,7 @@ class Map{
 
     drawMap(){
         drawSprites(this.hazards);
+        drawSprites(this.treasures);
         drawSprites(this.walls);
         drawSprites(this.floor);
         drawSprites(this.skeletons);

@@ -30,6 +30,7 @@ function preload() {
   song1 = loadSound('./assets/sound/tracks/CharacterEncounter.wav');
   song2 = loadSound('./assets/sound/tracks/MessageOfDarkness.wav');
   songDeath = loadSound('./assets/sound/tracks/SweetDeath.wav');
+  songOof = loadSound('./assets/sound/SFX/scream.mp3');
   alagardFont = loadFont('./assets/fonts/alagard.ttf');
   scene1 = loadGif('./assets/images/scene1.gif');    
   scene2 = loadGif('./assets/images/scene2.gif');
@@ -78,7 +79,7 @@ function draw() {
   //Level
   if (stage >= 1) {
     song1.stop();                                         // Stop song 1
-    if(!song2.isPlaying() && !songDeath.isPlaying()){                               // Play song 2
+    if(!song2.isPlaying() && !songDeath.isPlaying()){     // Play song 2
       song2.play();
     }                                                          
     gameMap.drawMap();
