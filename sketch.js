@@ -20,6 +20,7 @@ var songDeath;
 var alagardFont;
 var stage = 0;
 var torch;
+var plant;
 var drawTimes = 0;
 var animationSeconds = 500;
 var deathToIdle = animationSeconds;
@@ -31,6 +32,7 @@ var lvl;
 
 function preload() {
   torch = loadGif(imagesPath + 'tiles/torch.gif');
+  plant = loadGif(imagesPath + 'tiles/plant.gif');
   tiles = loadJSON(imagesPath + 'tiles/tiles.json');
   levels = loadJSON('./assets/levels.json');
   tileset = loadImage(imagesPath + 'tiles/dungeon-tileset-full.png');

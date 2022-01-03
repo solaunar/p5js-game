@@ -95,8 +95,12 @@ class Map{
                     this.lives.add(item.sprite);
                 } else if (itemTitle.startsWith("potion")) {
                     this.potions.add(item.sprite);
-                } else if (itemTitle.startsWith("skeleton")){
-                    this.skeletons.add(item.sprite);
+                } else if (itemTitle.startsWith("plant")){
+                    var plantSprite = createSprite(bufferx+c*size, buffery+r*size, 16, 16);
+                    plantSprite.scale = 1.5;
+                    plantSprite.addImage(plant);
+                    this.skeletons.add(plantSprite);
+                    continue;
                 }
             }
         }

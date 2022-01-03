@@ -6,7 +6,7 @@ class Status{
         this.canLevitate = player.canLevitate;
         this.size = 16* 3;
         this.bufferx = width/2 - 260;
-        this.buffery = height/2 + 275;
+        this.buffery = height/2 + 272;
         this.infoTiles = new Group();
     }
 
