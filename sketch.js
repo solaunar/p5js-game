@@ -19,6 +19,7 @@ var songFire;
 var songDeath;
 var alagardFont;
 var stage = 0;
+var torch;
 var drawTimes = 0;
 var animationSeconds = 500;
 var deathToIdle = animationSeconds;
@@ -29,6 +30,7 @@ var levels;
 var lvl;
 
 function preload() {
+  torch = loadGif(imagesPath + 'tiles/torch.gif');
   tiles = loadJSON(imagesPath + 'tiles/tiles.json');
   levels = loadJSON('./assets/levels.json');
   tileset = loadImage(imagesPath + 'tiles/dungeon-tileset-full.png');
@@ -104,8 +106,8 @@ function draw() {
   }
   noFill();
   stroke(32);
-  strokeWeight(86);
-  rect(width / 2 - 363, height / 2 - 283, 726, 636);
+  strokeWeight(140);
+  rect(width / 2 - 390, height / 2 - 310, 780, 690);
 }
 
 

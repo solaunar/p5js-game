@@ -14,6 +14,7 @@ class Map{
         this.lives = new Group();
         this.potions = new Group();
         this.skeletons = new Group();
+        this.torches = new Group();
     }
 
     drawMap(){
@@ -29,6 +30,7 @@ class Map{
     }
 
     drawItems(){
+        drawSprites(this.torches);
         drawSprites(this.coins);
         drawSprites(this.lives);
         drawSprites(this.potions);
@@ -74,6 +76,13 @@ class Map{
         for (let r = 0; r < row; r++) {
             for (let c = 0; c < col; c++) {
                 if(this.itemList[r][c] == -1){
+                    continue;
+                }
+                if(this.itemList[r][c] == 33){
+                    var torchSprite = createSprite(bufferx+c*size, buffery+r*size, 16, 16);
+                    torchSprite.scale = 2;
+                    torchSprite.addImage(torch);
+                    this.torches.add(torchSprite);
                     continue;
                 }
                 var itemInfo = tiles[this.itemList[r][c]];
