@@ -80,7 +80,7 @@ class Map{
                 }
                 if(this.itemList[r][c] == 33){
                     var torchSprite = createSprite(bufferx+c*size, buffery+r*size, 16, 16);
-                    torchSprite.scale = 2;
+                    torchSprite.scale = 0.5;
                     torchSprite.addImage(torch);
                     this.torches.add(torchSprite);
                     continue;

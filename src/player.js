@@ -69,7 +69,7 @@ class Player {
             stroke("#7e93d2");
             strokeWeight(5);
             textAlign(CENTER);
-            text(this.dieMessage, width / 2, height / 2 - 280);
+            text(this.dieMessage, width / 2, height / 2);
             song2.stop();
             if (!songDeath.isPlaying() && !this.changeToIdleDeath) {
                 songDeath.play();
@@ -263,7 +263,7 @@ class Player {
             stroke("#7e93d2");
             strokeWeight(5);
             textAlign(CENTER);
-            text('Be careful, you lost a life...', width / 2, height / 2 - 280);
+            text('Be careful, you lost a life...', width / 2, height / 2);
             return false;
         }
         return true;

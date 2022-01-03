@@ -44,10 +44,10 @@ class Status{
         var heartTileIndex = tiles[23]
         this.infoTiles.add(new Tile(heartTileIndex[2], heartTileIndex, 3, this.bufferx, this.buffery).sprite);
 
-        var coinTileIndex = tiles[7];
+        var coinTileIndex = tiles[16];
         this.infoTiles.add(new Tile(coinTileIndex[2], coinTileIndex, 3, this.bufferx + 3* this.size, this.buffery).sprite);
 
-        var potionTileIndex = tiles[8];
+        var potionTileIndex = tiles[27];
         this.infoTiles.add(new Tile(potionTileIndex[2], potionTileIndex, 3, this.bufferx + 6* this.size, this.buffery).sprite);
     }
 }
