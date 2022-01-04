@@ -1,15 +1,8 @@
 var player1;
-var imagesPath = 'assets/images/';
-var tileset;
+var imagesPath = './assets/images/';
+var soundPath = './assets/sound/';
 var status1;
 var gameMap;
-var walls;
-var floor;
-var hazards;
-var coins;
-var lives;
-var potions;
-var skeletons;
 var song1;
 var song2;
 var songCoin;
@@ -19,6 +12,7 @@ var songFire;
 var songDeath;
 var alagardFont;
 var stage = 0;
+var tileset;
 var torch;
 var plant;
 var drawTimes = 0;
@@ -27,53 +21,30 @@ var deathToIdle = animationSeconds;
 var respawnToIdle = animationSeconds;
 var levitationExpire = animationSeconds;
 var tiles;
+var numberOfLevels = 3;
 var levels;
+var maps = {};
 var lvl;
 
 function preload() {
-  torch = loadGif(imagesPath + 'tiles/torch.gif');
-  plant = loadGif(imagesPath + 'tiles/plant.gif');
   tiles = loadJSON(imagesPath + 'tiles/tiles.json');
   levels = loadJSON('./assets/levels.json');
-  tileset = loadImage(imagesPath + 'tiles/dungeon-tileset-full.png');
-  song1 = loadSound('./assets/sound/tracks/CharacterEncounter.wav');
-  song2 = loadSound('./assets/sound/tracks/MessageOfDarkness.wav');
-  songDeath = loadSound('./assets/sound/tracks/SweetDeath.wav');
-  songOof = loadSound('./assets/sound/SFX/scream.mp3');
-  songCoin = loadSound('./assets/sound/SFX/coin.wav');
-  songHeart = loadSound('./assets/sound/SFX/heart.wav');
-  songPotion = loadSound('./assets/sound/SFX/potion.mp3');
-  songFire = loadSound('./assets/sound/SFX/fireball.mp3');
   alagardFont = loadFont('./assets/fonts/alagard.ttf');
-  scene1 = loadGif('./assets/images/scene1.gif');
-  scene2 = loadGif('./assets/images/scene2.gif');
+  loadImages();
+  loadSounds();
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  startImg = loadImage("./assets/images/start.png");
-  song1.setLoop(true);
-  song1.setVolume(0.20);
-  song2.setLoop(true);
-  song2.setVolume(0.20);
-  songCoin.setVolume(0.05);
-  songHeart.setVolume(0.15);
-  songFire.setVolume(0.10);
-  lvl = levels["map_1"];
-  gameMap = new Map(lvl, levels["items_1"], 2.5);
+  textFont(alagardFont);
+  setUpSounds();
+  createLevelMaps();
+  gameMap = maps["1"];
   player1 = new Player(width / 2, height / 2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
   status1 = new Status(player1, "LVL - 1");
   status1.setUp();
   gameMap.createMap();
   gameMap.createItems();
-  walls = gameMap.walls;
-  floor = gameMap.floor;
-  hazards = gameMap.hazards;
-  coins = gameMap.coins;
-  lives = gameMap.lives;
-  potions = gameMap.potions;
-  skeletons = gameMap.skeletons;
-  textFont(alagardFont);
 }
 
 function draw() {
@@ -114,12 +85,11 @@ function draw() {
 
 
 function startScreen() {
-
   if (!song1.isPlaying()) {
     song1.play();
   }
-  image(scene1, width / 2 - 320, height / 2 - 240);
 
+  image(scene1, width / 2 - 320, height / 2 - 240);
   textStyle(BOLD);
   textSize(64);
   fill("#7e93d2");
@@ -136,9 +106,45 @@ function startScreen() {
   } else {
     fill(255);
   }
+
   stroke("#7e93d2");
   strokeWeight(5);
   textAlign(CENTER, CENTER);
   text("PRESS SPACE TO START", width / 2, height / 2 + 270);
+}
 
+function loadImages() {
+  tileset = loadImage(imagesPath + 'tiles/dungeon-tileset-full.png');
+  torch = loadGif(imagesPath + 'tiles/torch.gif');
+  plant = loadGif(imagesPath + 'tiles/plant.gif');
+  scene1 = loadGif(imagesPath + 'scene1.gif');
+  scene2 = loadGif(imagesPath + 'scene2.gif');
+}
+
+function loadSounds() {
+  song1 = loadSound(soundPath+'tracks/CharacterEncounter.wav');
+  song2 = loadSound(soundPath+'tracks/MessageOfDarkness.wav');
+  songDeath = loadSound(soundPath+'tracks/SweetDeath.wav');
+  songOof = loadSound(soundPath +'SFX/scream.mp3');
+  songCoin = loadSound(soundPath+'SFX/coin.wav');
+  songHeart = loadSound(soundPath+'SFX/heart.wav');
+  songPotion = loadSound(soundPath+'SFX/potion.mp3');
+  songFire = loadSound(soundPath+'SFX/fireball.mp3');
+}
+
+function setUpSounds() {
+  song1.setLoop(true);
+  song1.setVolume(0.20);
+  song2.setLoop(true);
+  song2.setVolume(0.20);
+  songCoin.setVolume(0.05);
+  songHeart.setVolume(0.15);
+  songFire.setVolume(0.10);
+  songPotion.setVolume(0.10);
+}
+
+function createLevelMaps() {
+  for (let i = 1; i <= numberOfLevels; i++ ) {
+    maps[i] = new Map(levels[`map_${i}`], levels[`items_${i}`], 2.5);
+  }
 }

@@ -36,10 +36,10 @@ class Player {
             if(this.canMove()){
                 this.playerMove();
             }
-            if (this.sprite.overlap(hazards) && this.canFall()) {
+            if (this.sprite.overlap(gameMap.hazards) && this.canFall()) {
                 this.loseLife();
             }
-            if (this.shadow.collide(walls)) {
+            if (this.shadow.collide(gameMap.walls)) {
                 this.stop();
             }
             if (this.sprite.overlap(gameMap.coins, this.getCoins)){
