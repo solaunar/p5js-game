@@ -39,12 +39,9 @@ function setup() {
   textFont(alagardFont);
   setUpSounds();
   createLevelMaps();
-  gameMap = maps["1"];
   player1 = new Player(width / 2, height / 2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'Q', 'E']);
   status1 = new Status(player1, "LVL - 1");
   status1.setUp();
-  gameMap.createMap();
-  gameMap.createItems();
 }
 
 function draw() {
@@ -62,9 +59,8 @@ function draw() {
   //Start Screen
   if (stage == 0) {
     startScreen();
-  }
-  //Level
-  if (stage >= 1) {
+  } else {
+    gameMap = maps[stage];
     song1.stop();                                         // Stop song 1
     if (!song2.isPlaying() && !songDeath.isPlaying()) {     // Play song 2
       song2.play();
@@ -75,7 +71,7 @@ function draw() {
     player1.update();
     gameMap.drawDoors();
     status1.draw();
-    status1.update(player1, 'LVL - 1');
+    status1.update(player1, `LVL - ${stage}`);
   }
   noFill();
   stroke(32);
@@ -145,6 +141,9 @@ function setUpSounds() {
 
 function createLevelMaps() {
   for (let i = 1; i <= numberOfLevels; i++ ) {
-    maps[i] = new Map(levels[`map_${i}`], levels[`items_${i}`], 2.5);
+    currentMap = new Map(levels[`map_${i}`], levels[`items_${i}`], 2.5);
+    currentMap.createMap();
+    currentMap.createItems();
+    maps[i] = currentMap;
   }
 }
