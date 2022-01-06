@@ -66,12 +66,12 @@ function draw() {
       gameMap = maps[stage];
       console.log(gameMap);
     }
-    song1.stop();                                         // Stop song 1
+    song1.stop();                                           // Stop song 1
     if (!song2.isPlaying() && !songDeath.isPlaying()) {     // Play song 2
       song2.play();
     }
     gameMap.drawMap();
-    gameMap.drawItems();                                       //Draw map
+    gameMap.drawItems();                                    // Draw map
     player1.draw();
     player1.update();
     gameMap.drawDoors();
