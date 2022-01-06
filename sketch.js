@@ -62,22 +62,25 @@ function draw() {
   if (stage == 0) {
     startScreen();
   } else {
-    if (changeLvl){
-      gameMap = maps[stage];
-      console.log(gameMap);
+    if (stage % 2 == 0){
+      if (changeLvl){
+        gameMap = maps[stage/2];
+      }
+      song1.stop();                                           // Stop song 1
+      if (!song2.isPlaying() && !songDeath.isPlaying()) {     // Play song 2
+        song2.play();
+      }
+      gameMap.drawMap();
+      gameMap.drawItems();                                    // Draw map
+      player1.draw();
+      player1.update();
+      gameMap.drawDoors();
+      status1.draw();
+      status1.update(player1, `LVL - ${stage}`);
+      changeLvl = false;
+    } else {
+      drawScroll(levels["scroll_"+Math.round((stage-1)/2)], Math.round((stage-1)/2))
     }
-    song1.stop();                                           // Stop song 1
-    if (!song2.isPlaying() && !songDeath.isPlaying()) {     // Play song 2
-      song2.play();
-    }
-    gameMap.drawMap();
-    gameMap.drawItems();                                    // Draw map
-    player1.draw();
-    player1.update();
-    gameMap.drawDoors();
-    status1.draw();
-    status1.update(player1, `LVL - ${stage}`);
-    changeLvl = false;
   }
   noFill();
   stroke(32);
@@ -113,6 +116,35 @@ function startScreen() {
   strokeWeight(5);
   textAlign(CENTER, CENTER);
   text("PRESS SPACE TO START", width / 2, height / 2 + 270);
+}
+
+function drawScroll(scroll, numberOfScroll){
+  if (!song1.isPlaying()) {
+    song1.play();
+  }
+  textStyle(BOLD);
+  textSize(50);
+  textAlign(CENTER, CENTER);
+  fill("#7e93d2");
+  text("Scroll " + ("I".repeat(numberOfScroll)), width / 2, height / 2 - 180);
+  fill(255);
+  text("Scroll " + ("I".repeat(numberOfScroll)), width / 2 - 3, height / 2 - 183);
+  //image(scene1, width / 2 - 320, height / 2 - 240);
+  stroke("#7e93d2");
+  strokeWeight(5);
+  fill(32);
+  textSize(34);
+  textWrap(WORD);
+  textAlign(LEFT, CENTER);
+  text(scroll, width / 2 - 300, height / 2 - 100, 620);
+  if (frameCount % 60 < 30) {
+    fill(66,25,93);
+  } else {
+    fill(255);
+  }
+  textSize(42);
+  textAlign(CENTER, CENTER);
+  text("PRESS SPACE TO CONTINUE", width / 2, height / 2 + 270);
 }
 
 function loadImages() {
