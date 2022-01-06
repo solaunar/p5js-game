@@ -1,4 +1,5 @@
 {
+  "prologue":"You are a reader - someone who can derive meaning from mere strokes forming all sorts of peculiar shapes.\n\nOnly you can read the ancient scrolls and find the Truth. But the ruins of your creators are suffocating. The stone looks like crying faces and the traps whisper your name sweetly.\n\nFor the sake of your own sanity, get out of there as soon as possible.",
   "map_1":[
       [10, 10, 10, 10, 10, 10,  9, 17, 18, 9, 10, 10, 10, 10, 10, 10],
       [10,  3, 22,  3,  3,  3,  1, 12, 12, 1,  3,  3,  3, 22,  3, 10],
@@ -86,6 +87,6 @@
     [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1] 
   ],
   "scroll_3":"So is the truth and the truth is such:\n\nYou have come too far. A glutenous fly drowning in too much honey that no longer tastes as sweet.\nYour mind is but a vessel for my world to bleed into.",
-  "ending_a":"It was always there. Part of you always knew. You knew you shouldn't look, but you had to. You had to. You let go and wonder why you didn't do so sooner. Finally, at peace.",
-  "ending_b":"There is nothing other than this, now. Big, big eyes stare at you expectantly. Don't they know? They command silently and you obey. You finally see, but it's not you anymore. Nothing remains of that person."
+  "ending_n":"It was always there. Part of you always knew. You knew you shouldn't look, but you had to. You had to. You let go and wonder why you didn't do so sooner. Finally, at peace.",
+  "ending_m":"There is nothing other than this, now. Big, big eyes stare at you expectantly. Don't they know? They command silently and you obey. You finally see, but it's not you anymore. Nothing remains of that person."
 }
