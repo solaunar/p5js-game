@@ -25,6 +25,7 @@ var numberOfLevels = 3;
 var levels;
 var maps = {};
 var lvl;
+var changeLvl = false;
 
 function preload() {
   tiles = loadJSON(imagesPath + 'tiles/tiles.json');
@@ -50,6 +51,7 @@ function draw() {
 
   if (keyWentUp('SPACE')) {
     stage++;
+    changeLvl = true;
   }
 
   fill(66,25,93);
@@ -60,7 +62,10 @@ function draw() {
   if (stage == 0) {
     startScreen();
   } else {
-    gameMap = maps[stage];
+    if (changeLvl){
+      gameMap = maps[stage];
+      console.log(gameMap);
+    }
     song1.stop();                                         // Stop song 1
     if (!song2.isPlaying() && !songDeath.isPlaying()) {     // Play song 2
       song2.play();
@@ -72,6 +77,7 @@ function draw() {
     gameMap.drawDoors();
     status1.draw();
     status1.update(player1, `LVL - ${stage}`);
+    changeLvl = false;
   }
   noFill();
   stroke(32);

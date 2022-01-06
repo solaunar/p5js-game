@@ -18,11 +18,7 @@ class Map{
     }
 
     drawMap(){
-        drawSprites(this.hazards);
-        drawSprites(this.treasures);
-        drawSprites(this.floor);
-        drawSprites(this.skeletons);
-        drawSprites(this.walls);
+        drawSprites(this.tilesSprites);
     }
 
     drawDoors(){
