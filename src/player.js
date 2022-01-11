@@ -36,12 +36,16 @@ class Player {
             if(this.canMove()){
                 this.playerMove();
             }
-            if(this.sprite.overlap(gameMap.doors)){
+            if(this.sprite.overlap(gameMap.doors) && gameMap.complete){
                 this.sprite.position.x = width / 2;
                 this.sprite.position.y = height / 2 + 140;
                 this.shadow.position.x = this.sprite.position.x;
                 this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
                 stage++;
+            }
+            if(gameMap.scroll!=undefined && this.sprite.overlap(gameMap.scroll)){
+                gameMap.scroll = undefined;
+                gameMap.complete = true;
             }
             if (this.sprite.overlap(gameMap.hazards) && this.canFall()) {
                 this.loseLife();

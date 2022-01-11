@@ -8,6 +8,7 @@ class Status{
         this.bufferx = width/2 - 260;
         this.buffery = height/2 + 272;
         this.infoTiles = new Group();
+        this.scroll = new Group();
     }
 
     draw(){
@@ -27,6 +28,10 @@ class Status{
         this.bufferx += 3* this.size;
         if(this.canLevitate && (levitationExpire - millis())/1000 >= 0){
             text(': ' + Math.floor((levitationExpire - millis())/1000), this.bufferx, this.buffery - 5);
+        }
+
+        if(gameMap.complete){
+            drawSprites(this.scroll);
         }
 
         this.bufferx += 3* this.size;
@@ -49,5 +54,8 @@ class Status{
 
         var potionTileIndex = tiles[27];
         this.infoTiles.add(new Tile(potionTileIndex[2], potionTileIndex, 3, this.bufferx + 6* this.size, this.buffery).sprite);
+
+        var scrollTileIndex = tiles[14];
+        this.scroll.add(new Tile(scrollTileIndex[2], scrollTileIndex, 3, this.bufferx + 8* this.size, this.buffery).sprite);
     }
 }

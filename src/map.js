@@ -1,5 +1,5 @@
 class Map{
-    constructor(tileList, itemList, scale){
+    constructor(tileList, itemList, scale, canScrollMove){
         this.tileList = tileList;
         this.itemList = itemList;
         this.tiles = [];
@@ -15,6 +15,10 @@ class Map{
         this.potions = new Group();
         this.skeletons = new Group();
         this.torches = new Group();
+        this.scroll = undefined;
+        this.setScrollMove = true;
+        this.complete = false;
+        this.canScrollMove = canScrollMove;
     }
 
     drawMap(){
@@ -31,6 +35,22 @@ class Map{
         drawSprites(this.lives);
         drawSprites(this.potions);
         drawSprites(this.skeletons);
+    }
+
+    drawScroll(){
+        if(this.scroll != undefined){
+            if(this.setScrollMove && this.canScrollMove){
+                this.scroll.velocity.x = 3;
+                this.setScrollMove = false;
+            }
+            drawSprite(this.scroll);
+        }
+    }
+
+    moveScroll(){
+        if (this.scroll != undefined && this.scroll.overlap(this.walls)){
+            this.scroll.velocity.x *= -1
+        }
     }
 
     createMap(){
@@ -97,6 +117,8 @@ class Map{
                     plantSprite.addImage(plant);
                     this.skeletons.add(plantSprite);
                     continue;
+                } else if (itemTitle.startsWith("scroll")){
+                    this.scroll = item.sprite;
                 }
             }
         }

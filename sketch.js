@@ -45,7 +45,7 @@ function setup() {
   textFont(alagardFont);
   setUpSounds();
   createLevelMaps();
-  player1 = new Player(width / 2, height / 2, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'N', 'M']);
+  player1 = new Player(width / 2, height / 2 +140, 64, 64, 2, 5, 1, 'player1', ['W', 'S', 'A', 'D', 'N', 'M']);
   status1 = new Status(player1, "LVL - 1");
   status1.setUp();
 }
@@ -81,8 +81,10 @@ function draw() {
       if (!song2.isPlaying() && !songDeath.isPlaying()) {     // Play song 2
         song2.play();
       }
-      gameMap.drawMap();
-      gameMap.drawItems();                                    // Draw map
+      gameMap.drawMap();       
+      gameMap.drawScroll();
+      gameMap.moveScroll();
+      gameMap.drawItems();                             // Draw map
       player1.draw();
       player1.update();
       gameMap.drawDoors();
@@ -276,7 +278,7 @@ function setUpSounds() {
 
 function createLevelMaps() {
   for (let i = 1; i <= numberOfLevels; i++) {
-    currentMap = new Map(levels[`map_${i}`], levels[`items_${i}`], 2.5);
+    currentMap = new Map(levels[`map_${i}`], levels[`items_${i}`], 2.5, levels[`scroll_${i}_move`]);
     currentMap.createMap();
     currentMap.createItems();
     maps[i] = currentMap;
