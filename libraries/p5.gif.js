@@ -693,7 +693,6 @@
         pushFrame();
         player.init();
         loading = false;
-        console.log('ok');
         if (load_callback) {
           load_callback(gif);
         }

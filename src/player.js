@@ -16,9 +16,11 @@ class Player {
         this.shadow = this.addShadow();
         this.canLevitate = false;
         this.dieMessage = "YOU DIED IDIOT SHINJI";
+        this.prematureDeath = false;
         this.sprite.setCollider("rectangle", 0, height / 2, 4, 4);
         this.shadow.setCollider("rectangle", 0, 0, 32, 16);
         this.addAnimations();
+        this.isAttacking = keyDown(moveKeys[4]);
         this.changeToIdleDeath = false;
     }
 
@@ -30,15 +32,52 @@ class Player {
     }
 
     update() {
+        var time = millis();
         if (this.isAlive()) {
             if(this.canMove()){
                 this.playerMove();
             }
-            if (this.sprite.overlap(hazards)) {
+            if(this.sprite.overlap(gameMap.doors) && gameMap.complete){
+                this.sprite.position.x = width / 2;
+                this.sprite.position.y = height / 2 + 140;
+                this.shadow.position.x = this.sprite.position.x;
+                this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
+                stage++;
+            }
+            if(this.sprite.overlap(gameMap.doors) && !gameMap.complete){
+                this.prematureDeath = true;
+            }
+            if(gameMap.scroll!=undefined && this.sprite.overlap(gameMap.scroll)){
+                songScroll.play();
+                gameMap.scroll = undefined;
+                gameMap.complete = true;
+            }
+            if (this.sprite.overlap(gameMap.hazards) && this.canFall()) {
                 this.loseLife();
             }
-            if (this.shadow.collide(walls)) {
+            if (this.shadow.collide(gameMap.walls)) {
                 this.stop();
+            }
+            if (this.sprite.overlap(gameMap.coins, this.getCoins)){
+                this.coins += 10;
+            }
+            if (this.sprite.overlap(gameMap.potions, this.getPotion)){
+                this.canLevitate = true;
+                levitationExpire = time + 20*animationSeconds;
+            }
+            if (this.sprite.overlap(gameMap.lives, this.getLife)){
+                this.lives += 1;
+            }
+            if (time >= levitationExpire){
+                this.canLevitate = false;
+            }
+            if (this.shadow.overlap(gameMap.skeletons)){
+                if(this.isAttacking){
+                    this.shadow.overlap(gameMap.skeletons, this.rekSkel);
+                    this.coins += 100;
+                } else {
+                    this.loseLife();
+                }
             }
         } else {
             textSize(50);
@@ -46,8 +85,7 @@ class Player {
             stroke("#7e93d2");
             strokeWeight(5);
             textAlign(CENTER);
-            text(this.dieMessage, width / 2, height / 2 - 280);
-            var time = millis();
+            text(this.dieMessage, width / 2, height / 2);
             song2.stop();
             if (!songDeath.isPlaying() && !this.changeToIdleDeath) {
                 songDeath.play();
@@ -147,7 +185,7 @@ class Player {
             this.sprite.changeAnimation('deadRL');
         }
     }
-    /////////////////////////////////////////////////////// END OF MUST FIX
+
     playerMove() {
         var moveUpKey = this.moveKeys[0];
         var moveDownKey = this.moveKeys[1];
@@ -156,9 +194,10 @@ class Player {
         var attackKey = this.moveKeys[4];
         var jumpKey = this.moveKeys[5];
 
+        this.isAttacking = keyDown(attackKey);
         if (keyDown(jumpKey) && this.canLevitate) {
             this.sprite.scale = this.scale + 0.3;
-            this.shadow.scale = this.shadowScale + 0.05 * this.shadow;
+            this.shadow.scale = this.shadowScale + 0.05 * this.shadowScale;
             this.sprite.position.y = this.shadow.position.y - (20 * this.scale) - (15 * this.shadow.scale);
         } else {
             this.sprite.scale = this.scale;
@@ -206,21 +245,31 @@ class Player {
         }
 
         if (keyDown(attackKey)) {
+            if(!songFire.isPlaying()){
+                songFire.play(0, 1.2);
+            }
             this.switchAttack();
         }
     }
 
     loseLife() {
         this.lives -= 1;
+        if (!songOof.isPlaying() && !this.changeToIdleDeath) {
+            songOof.play();
+        }
         if (this.lives != 0) {     // We don't want him to respawn if he is out of lives
             this.sprite.position.x = this.initialX;
             this.sprite.position.y = this.initialY;
             this.lastMove = 'D';
             this.shadow.position.x = this.sprite.position.x;
             this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
-            this.sprite.changeAnimation('spellcastD');
+            this.sprite.changeAnimation('spellcastD');           
             respawnToIdle = millis() + 2*animationSeconds;
         }
+    }
+
+    rekSkel(player, skeleton) {
+        skeleton.remove();
     }
 
     canMove(){
@@ -230,10 +279,14 @@ class Player {
             stroke("#7e93d2");
             strokeWeight(5);
             textAlign(CENTER);
-            text('Be careful, you lost a life...', width / 2, height / 2 - 280);
+            text('Be careful, you lost a life...', width / 2, height / 2);
             return false;
         }
         return true;
+    }
+
+    canFall(){
+        return !(this.canLevitate && keyDown(this.moveKeys[5]));
     }
 
     stop() {
@@ -250,5 +303,24 @@ class Player {
             this.sprite.position.y -= this.moveSpeed;
             this.shadow.position.y -= this.moveSpeed;
         }
+    }
+
+    getCoins(player, coin){
+        songCoin.play();
+        coin.remove();
+    }
+
+    getPotion(player, potion){
+        songPotion.play();
+        potion.remove();
+    }
+
+    getLife(player, life){
+        songHeart.play();
+        life.remove();
+    }
+
+    getPrematureDeath(){
+        return this.prematureDeath;
     }
 }
