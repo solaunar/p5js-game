@@ -6,15 +6,17 @@ var gameMap;
 var song1;
 var song2;
 var song3;
+var songScroll;
 var songCoin;
 var songHeart;
 var songPotion;
 var songFire;
 var songDeath;
 var alagardFont;
-var stage = 0;
+var stage = -1;
 var scene1;
 var scene2;
+var controls;
 var tileset;
 var torch;
 var plant;
@@ -31,6 +33,9 @@ var lvl;
 var changeLvl = false;
 var choice = "";
 var madeChoice = false;
+var isInLevel = false;
+var gameOver = false;
+var reload = false;
 
 function preload() {
   tiles = loadJSON(imagesPath + 'tiles/tiles.json');
@@ -54,9 +59,13 @@ function draw() {
   background(32);
   drawTimes += 1;
 
-  if (keyWentUp('SPACE')) {
+  if (keyWentUp('SPACE') && !isInLevel && !gameOver) {
     stage++;
     changeLvl = true;
+  }
+
+  if(keyWentUp('ENTER') && gameOver){
+    location.reload();
   }
 
   fill(66, 25, 93);
@@ -64,15 +73,20 @@ function draw() {
   rect(width / 2 - 320, height / 2 - 240, 640, 550);
 
   //Start Screen
-  if (stage == 0) {
+  if (stage == -1) {
     startScreen();
+  } else if (stage == 0){
+    controlsScreen();
   } else if (stage == 1) {
     prologue();
   } else if (stage == numberOfLevels*2+2){
     finalChoice();
-  } else if (stage == numberOfLevels*2+3){
-    location.reload();
-  } else {
+    gameOver = true;
+  } else if (player1.getPrematureDeath()){
+    drawEnding('p');
+    gameOver = true;
+  }
+  else {
     if (stage % 2 == 0) {
       if (changeLvl) {
         gameMap = maps[stage / 2];
@@ -91,8 +105,10 @@ function draw() {
       status1.draw();
       status1.update(player1, `LVL - ${stage/2}`);
       changeLvl = false;
+      isInLevel = true;
     } else {
-      drawScroll(levels["scroll_" + Math.round((stage - 1) / 2)], Math.round((stage - 1) / 2))
+      drawScroll(levels["scroll_" + Math.round((stage - 1) / 2)], Math.round((stage - 1) / 2));
+      isInLevel = false;
     }
   }
   noFill();
@@ -126,6 +142,24 @@ function startScreen() {
   strokeWeight(5);
   textAlign(CENTER, CENTER);
   text("PRESS SPACE TO START", width / 2, height / 2 + 270);
+}
+
+function controlsScreen() {
+  if (!song1.isPlaying()) {
+    song1.play();
+  }
+  image(controls, width / 2 - 320, height / 2 - 240);
+  textStyle(NORMAL);
+  textSize(48);
+  if (frameCount % 60 < 30) {
+    fill(66, 25, 93);
+  } else {
+    fill(255);
+  }
+  stroke("#7e93d2");
+  strokeWeight(5);
+  textAlign(CENTER, CENTER);
+  text("PRESS SPACE TO CONTINUE", width / 2, height / 2 + 270);
 }
 
 function prologue(){
@@ -211,7 +245,7 @@ function drawEnding(choice) {
   }
   textSize(42);
   textAlign(CENTER, CENTER);
-  text("PRESS SPACE TO RESTART", width / 2, height / 2 + 270);
+  text("PRESS ENTER TO RESTART", width / 2, height / 2 + 270);
 }
 
 function drawScroll(scroll, numberOfScroll) {
@@ -250,6 +284,7 @@ function loadImages() {
   plant = loadGif(imagesPath + 'tiles/plant.gif');
   scene1 = loadGif(imagesPath + 'scene1.gif');
   scene2 = loadGif(imagesPath + 'scene2.gif');
+  controls = loadGif(imagesPath + 'controls.gif');
 }
 
 function loadSounds() {
@@ -258,6 +293,7 @@ function loadSounds() {
   song3 = loadSound(soundPath + 'tracks/BloodyTears.wav');
   songDeath = loadSound(soundPath + 'tracks/SweetDeath.wav');
   songOof = loadSound(soundPath + 'SFX/scream.mp3');
+  songScroll = loadSound(soundPath + 'SFX/scroll.mp3');
   songCoin = loadSound(soundPath + 'SFX/coin.wav');
   songHeart = loadSound(soundPath + 'SFX/heart.wav');
   songPotion = loadSound(soundPath + 'SFX/potion.mp3');
@@ -274,6 +310,7 @@ function setUpSounds() {
   songHeart.setVolume(0.15);
   songFire.setVolume(0.10);
   songPotion.setVolume(0.10);
+  songScroll.setVolume(0.10);
 }
 
 function createLevelMaps() {
