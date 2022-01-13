@@ -150,7 +150,7 @@ function controlsScreen() {
   }
   image(controls, width / 2 - 320, height / 2 - 240);
   textStyle(NORMAL);
-  textSize(48);
+  textSize(42);
   if (frameCount % 60 < 30) {
     fill(66, 25, 93);
   } else {
