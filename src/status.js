@@ -22,10 +22,12 @@ class Status{
         strokeWeight(5);
         fill(32);
         text(': ' + this.lives, this.bufferx, this.buffery - 5);
-        this.bufferx += 3* this.size;
+        this.bufferx += 2.5* this.size;
+        textAlign(LEFT);
         text(': ' + this.coins, this.bufferx, this.buffery - 5);
 
-        this.bufferx += 3* this.size;
+        this.bufferx += 3.5* this.size;
+        textAlign(CENTER, CENTER);
         if(this.canLevitate && (levitationExpire - millis())/1000 >= 0){
             text(': ' + Math.floor((levitationExpire - millis())/1000), this.bufferx, this.buffery - 5);
         }

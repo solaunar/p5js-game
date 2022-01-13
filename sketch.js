@@ -22,6 +22,9 @@ var torch;
 var plant;
 var drawTimes = 0;
 var animationSeconds = 500;
+var countdown = 280000;
+var timeForCountdownToEnd = countdown;
+var countdownSet = false;
 var deathToIdle = animationSeconds;
 var respawnToIdle = animationSeconds;
 var levitationExpire = animationSeconds;
@@ -71,7 +74,6 @@ function draw() {
   fill(66, 25, 93);
   noStroke();
   rect(width / 2 - 320, height / 2 - 240, 640, 550);
-
   //Start Screen
   if (stage == -1) {
     startScreen();
@@ -87,6 +89,10 @@ function draw() {
     gameOver = true;
   }
   else {
+    if (stage == 2 && !countdownSet) {
+      countdownSet = true;
+      timeForCountdownToEnd = millis() + countdown;
+    }
     if (stage % 2 == 0) {
       if (changeLvl) {
         gameMap = maps[stage / 2];
@@ -115,6 +121,18 @@ function draw() {
   stroke(32);
   strokeWeight(140);
   rect(width / 2 - 390, height / 2 - 310, 780, 690);
+  if(countdownSet){
+    timer();
+  }
+}
+
+function timer(){
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  stroke("#7e93d2");
+  strokeWeight(5);
+  fill(32);
+  text(Math.floor((timeForCountdownToEnd - millis())/1000), width/2, height/2 - 300);
 }
 
 

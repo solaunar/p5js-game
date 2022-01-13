@@ -60,6 +60,7 @@ class Player {
             }
             if (this.sprite.overlap(gameMap.coins, this.getCoins)){
                 this.coins += 10;
+                timeForCountdownToEnd -= 1000;
             }
             if (this.sprite.overlap(gameMap.potions, this.getPotion)){
                 this.canLevitate = true;
@@ -75,6 +76,7 @@ class Player {
                 if(this.isAttacking){
                     this.shadow.overlap(gameMap.skeletons, this.rekSkel);
                     this.coins += 100;
+                    timeForCountdownToEnd -= 3000;
                 } else {
                     this.loseLife();
                 }
