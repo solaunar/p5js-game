@@ -16,6 +16,7 @@ class Player {
         this.shadow = this.addShadow();
         this.canLevitate = false;
         this.dieMessage = "YOU DIED IDIOT SHINJI";
+        this.prematureDeath = false;
         this.sprite.setCollider("rectangle", 0, height / 2, 4, 4);
         this.shadow.setCollider("rectangle", 0, 0, 32, 16);
         this.addAnimations();
@@ -43,7 +44,11 @@ class Player {
                 this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
                 stage++;
             }
+            if(this.sprite.overlap(gameMap.doors) && !gameMap.complete){
+                this.prematureDeath = true;
+            }
             if(gameMap.scroll!=undefined && this.sprite.overlap(gameMap.scroll)){
+                songScroll.play();
                 gameMap.scroll = undefined;
                 gameMap.complete = true;
             }
@@ -313,5 +318,9 @@ class Player {
     getLife(player, life){
         songHeart.play();
         life.remove();
+    }
+
+    getPrematureDeath(){
+        return this.prematureDeath;
     }
 }
