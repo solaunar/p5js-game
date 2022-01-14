@@ -108,11 +108,19 @@ function draw() {
         finalChoice();
       } else {
         drawEnding('c');
+        song1.stop();
+        if (!song5.isPlaying()) {
+          song5.play();
+        }
         glitch = true;
       }
       gameOver = true;
     } else if (player1.getPrematureDeath()) {
       drawEnding('p');
+      song2.stop();
+        if (!song4.isPlaying()) {
+          song4.play();
+        }
       gameOver = true;
     }
     else {
@@ -159,8 +167,12 @@ function timer() {
   textAlign(CENTER, CENTER);
   stroke("#7e93d2");
   strokeWeight(5);
-  fill(32);
   timeLeft = Math.floor((timeForCountdownToEnd - millis()) / 1000);
+  if (timeLeft > 0){
+    fill(32);
+  } else {
+    fill(200, 10, 0);
+  }
   text(timeLeft, width / 2, height / 2 - 300);
 }
 
@@ -350,6 +362,8 @@ function loadSounds() {
   song1 = loadSound(soundPath + 'tracks/CharacterEncounter.wav');
   song2 = loadSound(soundPath + 'tracks/MessageOfDarkness.wav');
   song3 = loadSound(soundPath + 'tracks/BloodyTears.wav');
+  song4 = loadSound(soundPath + 'tracks/PoisonMind.wav');
+  song5 = loadSound(soundPath + 'tracks/Nightmare.wav');
   songDeath = loadSound(soundPath + 'tracks/SweetDeath.wav');
   songOof = loadSound(soundPath + 'SFX/scream.mp3');
   songScroll = loadSound(soundPath + 'SFX/scroll.mp3');
@@ -364,7 +378,12 @@ function setUpSounds() {
   song1.setVolume(0.10);
   song2.setLoop(true);
   song2.setVolume(0.10);
+  song3.setLoop(true);
   song3.setVolume(0.10);
+  song4.setLoop(true);
+  song4.setVolume(0.10);
+  song5.setLoop(true);
+  song5.setVolume(0.10);
   songCoin.setVolume(0.05);
   songHeart.setVolume(0.15);
   songFire.setVolume(0.10);
