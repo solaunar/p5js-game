@@ -15,7 +15,7 @@ class Player {
         this.shadowScale = shadowScale;
         this.shadow = this.addShadow();
         this.canLevitate = false;
-        this.dieMessage = "YOU DIED IDIOT SHINJI";
+        this.dieMessage = "YOU DIED IDIOT SHINJI\n PRESS ENTER TO RESTART";
         this.prematureDeath = false;
         this.sprite.setCollider("rectangle", 0, height / 2, 4, 4);
         this.shadow.setCollider("rectangle", 0, 0, 32, 16);
@@ -101,6 +101,7 @@ class Player {
                     this.changeToIdleDeath = true;
                 }
             }
+            gameOver = true;
         }
     }
 
