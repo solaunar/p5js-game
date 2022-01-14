@@ -21,7 +21,8 @@ var tileset;
 var torch;
 var plant;
 var animationSeconds = 500;
-var countdown = 50000;
+var countdownSeconds = 180;
+var countdown = countdownSeconds * 1000;
 var timeForCountdownToEnd = countdown;
 var countdownSet = false;
 var timeLeft = timeForCountdownToEnd;
@@ -31,6 +32,7 @@ var levitationExpire = animationSeconds;
 var tiles;
 var numberOfLevels = 3;
 var levels;
+var eyeFrames = {};
 var maps = {};
 var lvl;
 var changeLvl = false;
@@ -156,24 +158,33 @@ function draw() {
     stroke(32);
     strokeWeight(140);
     rect(width / 2 - 390, height / 2 - 310, 780, 690);
-    if (countdownSet && !gameOver) {
+    if (countdownSet) {
       timer();
     }
   }
 }
 
 function timer() {
-  textSize(32);
+  textSize(30);
   textAlign(CENTER, CENTER);
   stroke("#7e93d2");
   strokeWeight(5);
-  timeLeft = Math.floor((timeForCountdownToEnd - millis()) / 1000);
+  if (!gameOver){
+    timeLeft = Math.floor((timeForCountdownToEnd - millis()) / 1000);
+  }
   if (timeLeft > 0){
     fill(32);
   } else {
     fill(200, 10, 0);
   }
-  text(timeLeft, width / 2, height / 2 - 300);
+  var eyeFrameIndex = Math.floor((countdownSeconds-timeLeft)/20);
+  if (eyeFrameIndex > 0){
+    if (eyeFrameIndex >=8){
+      eyeFrameIndex = 8;
+    }
+    image(eyeFrames[eyeFrameIndex], width/2 -50, height/2 - 340, 100, 60);
+  }
+  text(timeLeft, width/2, height/2 - 260);
 }
 
 function makeGlitch() {
@@ -356,6 +367,14 @@ function loadImages() {
   scene1 = loadGif(imagesPath + 'scene1.gif');
   scene2 = loadGif(imagesPath + 'scene2.gif');
   controls = loadGif(imagesPath + 'controls.gif');
+  eye();
+}
+
+function eye(){
+  for (let i = 1; i<=8; i++){
+    var img = loadImage(imagesPath+'eye/eye_'+i+'.png');
+    eyeFrames[i] = img;
+  }
 }
 
 function loadSounds() {
