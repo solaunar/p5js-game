@@ -82,7 +82,7 @@ class Player {
                 }
             }
         } else {
-            textSize(50);
+            textSize(42);
             fill("#4a1856");
             stroke("#7e93d2");
             strokeWeight(5);
