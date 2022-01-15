@@ -266,7 +266,9 @@ class Player {
             this.lastMove = 'D';
             this.shadow.position.x = this.sprite.position.x;
             this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
-            this.sprite.changeAnimation('spellcastD');           
+            this.sprite.changeAnimation('spellcastD');
+            levitationExpire = 0;
+            gameMap.restorePotions();           
             respawnToIdle = millis() + 2*animationSeconds;
         }
     }
@@ -315,7 +317,8 @@ class Player {
 
     getPotion(player, potion){
         songPotion.play();
-        potion.remove();
+        gameMap.potionsBackUp.add(potion);
+        gameMap.potions.remove(potion);
     }
 
     getLife(player, life){

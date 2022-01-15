@@ -13,6 +13,7 @@ class Map{
         this.coins = new Group();
         this.lives = new Group();
         this.potions = new Group();
+        this.potionsBackUp = new Group();
         this.skeletons = new Group();
         this.torches = new Group();
         this.scroll = undefined;
@@ -123,4 +124,13 @@ class Map{
             }
         }
     }
+
+    restorePotions(){
+        for (let i = 0; i < this.potionsBackUp.length; i++){
+            var sprite = this.potionsBackUp.get(i);
+            this.potions.add(sprite);
+            this.potionsBackUp.remove(sprite);
+        }
+    }
+
 }
