@@ -115,8 +115,8 @@ function draw() {
           song5.play();
         }
         glitch = true;
+        gameOver = true;
       }
-      gameOver = true;
     } else if (player1.getPrematureDeath()) {
       drawEnding('p');
       song2.stop();
@@ -270,6 +270,7 @@ function prologue() {
 }
 
 function finalChoice() {
+  isInLevel = true;
   if (keyWentUp('N') && !madeChoice) {
     choice = 'n';
     madeChoice = true;
@@ -327,6 +328,7 @@ function drawEnding(choice) {
   }
   textSize(42);
   textAlign(CENTER, CENTER);
+  gameOver = true;
   text("PRESS ENTER TO RESTART", width / 2, height / 2 + 270);
 }
 
