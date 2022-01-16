@@ -1,29 +1,61 @@
+/**
+ * @class Player representing a player of the game.
+ */
 class Player {
+    /**
+     * @constructor
+     * @param {number} x position of the Player to be drawn.
+     * @param {number} y position of the Player to be drawn.
+     * @param {number} height height of the Player sprite.
+     * @param {number} width width of the Player sprite.
+     * @param {number} scale the scale that the Player sprite will be drawn.
+     * @param {number} moveSpeed the moveSpeed of Player- how many pixels it will move on each draw.
+     * @param {number} shadowScale the scale that the shadow sprite of the Player will be drawn.
+     * @param {string} playerName the name of the Player.
+     * @param {Array<string>} moveKeys array of keys that will move the player [UP, DOWN, LEFT, RIGHT, ATTACK, JUMP]
+     */
     constructor(x, y, height, width, scale, moveSpeed, shadowScale, playerName, moveKeys) {
         this.initialX = x;
         this.initialY = y;
         this.playerName = playerName;
+        //lastMove property is used to store the direction of the movement of the player so that the animation can change accordingly
         this.lastMove = 'D';
+        //each player starts with a 3 life counter
         this.lives = 3;
+        //each player starts with a score of 0 coins in their pouch
         this.coins = 0;
         this.moveKeys = moveKeys;
         this.moveSpeed = moveSpeed;
         this.height = height;
         this.width = width;
+        //every tile has a p5.play.js sprite attribute to handle collisions and draws of the player
         this.sprite = createSprite(x, y, height, width);
         this.scale = scale;
         this.shadowScale = shadowScale;
+        //shadow sprite of the player
         this.shadow = this.addShadow();
+        //canLevitate property indicates if player can use his levitation power provided by potions
         this.canLevitate = false;
         this.dieMessage = "YOU DIED IDIOT SHINJI\n PRESS ENTER TO RESTART";
+        //indicates if player died prematurely - due to trying to pass level without picking up a scroll
         this.prematureDeath = false;
+        //set up a collider to the player sprite to check collisions with enemies and items
         this.sprite.setCollider("rectangle", 0, height / 2, 4, 4);
+        //set up a collider to the shadow sprite to check collisions with walls
         this.shadow.setCollider("rectangle", 0, 0, 32, 16);
+        //load animations in the player sprite to change in between them
         this.addAnimations();
+        //isAttacking function indicates that the player is currently using his fire spell to attack
         this.isAttacking = keyDown(moveKeys[4]);
+        //changeToIdleDeath attribute indicates if the player animation is ready to be changed and stay at idle death
         this.changeToIdleDeath = false;
     }
 
+    /**
+     * Draws the sprites of the player and the shadow, shadow is drawn first so that the player can be drawn on top of it hiding the
+     * part that he's stepping on. The tint is first set to 255, 160 to make the shadow transparent, whereas then set bad to 255, 255
+     * to draw the player in opaque color.
+     */
     draw() {
         tint(255, 160);
         drawSprite(this.shadow);
@@ -31,12 +63,20 @@ class Player {
         drawSprite(this.sprite);
     }
 
+    /**
+     * Updates the player accordingly, if player is still alive checks for player interactions on the map and updates his movement if
+     * he can move. @method update also handles the case of the player running out of lives.
+     */
     update() {
+        //get time of update
         var time = millis();
         if (this.isAlive()) {
+            //if player can move update his position and antimations in playerMove
             if(this.canMove()){
                 this.playerMove();
             }
+            //if player is going through the door of the currently set gameMap in sketch and the gameMap - level is complete
+            //then update player position to the entrance of the next level and move the stage forward by one
             if(this.sprite.overlap(gameMap.doors) && gameMap.complete){
                 this.sprite.position.x = width / 2;
                 this.sprite.position.y = height / 2 + 140;
@@ -44,20 +84,32 @@ class Player {
                 this.shadow.position.y = this.sprite.position.y + (20 * this.scale);
                 stage++;
             }
+            //if the player is going through the door of the currently set gameMap in sketch and the gameMap - level is NOT complete
+            //the player should go through the premature death, therefore his prematureDeath attribute is set to true
             if(this.sprite.overlap(gameMap.doors) && !gameMap.complete){
                 this.prematureDeath = true;
             }
+            //if the scroll exists on the gameMap (!=undefined) and the player gets the scroll then play the corresponding audio,
+            //set the scroll to undefined and set the level - gameMap as complete, since the scroll is the objective
             if(gameMap.scroll!=undefined && this.sprite.overlap(gameMap.scroll)){
                 songScroll.play();
                 gameMap.scroll = undefined;
                 gameMap.complete = true;
             }
+            //if the player overlaps the hazards - pits and he can fall at the moment being (he hasn't the levitation power or he does
+            //and is not using it right now) then the player will lose a life
             if (this.sprite.overlap(gameMap.hazards) && this.canFall()) {
                 this.loseLife();
             }
+            //due to the game being top down we check the collisions of the player with the walls - to restrict him from moving through them
+            //by using his shadow sprite, ideally the shadow should not ride over the walls that's why we're using its collision
+            //therefore if the shadow is indeed colliding with a wall, the player will be stopped
             if (this.shadow.collide(gameMap.walls)) {
                 this.stop();
             }
+            //if the player overlaps with the coins of the map, then the callback function getCoins is called, to play the corresponding sfx
+            //and remove the coin tile-sprite from the map
+            //additionally the player's score increases by 10, whereas the timer for game completion decreases by 1000 millis - 1 second
             if (this.sprite.overlap(gameMap.coins, this.getCoins)){
                 this.coins += 10;
                 timeForCountdownToEnd -= 1000;
@@ -71,7 +123,11 @@ class Player {
             }
             if (time >= levitationExpire){
                 this.canLevitate = false;
-            }
+            }//if the player overlaps with the formerly skeletons, but now refactored to potionous plants of the map
+            //and the player is currently attacking (holding down their attack key) then the callback function rekSkel is called, 
+            //to play the corresponding sfx audio and remove the enemy tile-sprite from the map
+            //additionally the player's score increases by 10, whereas the timer for game completion decreases by 3000 millis - 5 second
+            //however, if the player is not attacking at the moment, they will lose a life
             if (this.shadow.overlap(gameMap.skeletons)){
                 if(this.isAttacking){
                     this.shadow.overlap(gameMap.skeletons, this.rekSkel);
@@ -82,6 +138,8 @@ class Player {
                 }
             }
         } else {
+            //given that the player is not alive, the die message will be posted, the gameOver will be ultimately set to true so that the
+            //game can restart and a new song will play in the same time of the death animation, after that the player will remain laying dead
             textSize(42);
             fill("#4a1856");
             stroke("#7e93d2");
@@ -105,6 +163,11 @@ class Player {
         }
     }
 
+    /**
+     * @method addShadow creates the shadow sprite of the player once it's instanciated, the shadow's position is related to the
+     * player's sprite position
+     * @returns shadow sprite of player
+     */
     addShadow() {
         var shadow = createSprite(this.sprite.position.x, this.sprite.position.y + (20 * this.scale), 64, 64);
         var shadowImg = loadImage(`${imagesPath}/shadow.png`);
@@ -114,6 +177,10 @@ class Player {
         return shadow;
     }
 
+    /**
+     * addAnimations mostly serves as a tracking method, to hold in a single placement of code the animations that need to be added
+     * by using the addSingleAnimation, the animation names consist of the prefixes of the possible animations of the sprite in the assets
+     */
     addAnimations() {
         this.addSingleAnimation('D', 'idleD', 1);
         this.addSingleAnimation('D', 'spellcastD', 14);
@@ -133,6 +200,12 @@ class Player {
         this.addSingleAnimation('U', 'deathU', 7);
     }
 
+    /**
+     * 
+     * @param {string} direction a single character D RL or U, indicating the direction the assets describe (down,right/left or up)
+     * @param {string} animationName the name of the animation to be added to the player's sprite
+     * @param {number} numberOfFrames the number of frames that the animation consists of in the assets
+     */
     addSingleAnimation(direction, animationName, numberOfFrames) {
         var path = './' + imagesPath + `${this.playerName}/${direction}/${animationName}_`;
         var framePaths = [];
