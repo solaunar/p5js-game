@@ -1,3 +1,5 @@
+const p5 = require("../../../.vscode/extensions/samplavigne.p5-vscode-1.2.8/p5types");
+
 /**
  * @class Player representing a player of the game.
  */
@@ -201,6 +203,7 @@ class Player {
     }
 
     /**
+     * This method loads each frame of an animation and then adds it to the player sprite with the animation name given.
      * 
      * @param {string} direction a single character D RL or U, indicating the direction the assets describe (down,right/left or up)
      * @param {string} animationName the name of the animation to be added to the player's sprite
@@ -216,12 +219,19 @@ class Player {
         this.sprite.addAnimation(animationName, animation);
     }
 
+    /**
+     * Indicates if player is alive or not
+     * @returns true if the players lives are more than 0, false else
+     */
     isAlive() {
         if (this.lives > 0)
             return true;
         return false;
     }
 
+    /**
+     * This is a help function for the idle animation change based on the player's last move.
+     */
     switchIdle() {
         if (this.lastMove == 'D') {
             this.sprite.changeAnimation('idleD');
@@ -232,6 +242,9 @@ class Player {
         }
     }
 
+    /**
+     * This is a help function for the attack animation change based on the player's last move.
+     */
     switchAttack() {
         if (this.lastMove == 'D') {
             this.sprite.changeAnimation('attackD');
@@ -242,6 +255,10 @@ class Player {
         }
     }
 
+
+    /**
+     * This is a help function for the death animation change based on the player's last move.
+     */
     switchDeath() {
         if (this.lastMove == 'D') {
             this.sprite.changeAnimation('deathD');
@@ -252,6 +269,10 @@ class Player {
         }
     }
 
+
+    /**
+     * This is a help function for the idle death animation change based on the player's last move.
+     */
     switchDead() {
         if (this.lastMove == 'D') {
             this.sprite.changeAnimation('deadD');
@@ -262,6 +283,15 @@ class Player {
         }
     }
 
+    /**
+     * This is the function that defines the player's movements, the moveKeys are set and when the use is holding
+     * down a specific key the player either:
+     * - moves (up down left right) by *moveSpeed* pixels, and the animation changes to walking comparing the 
+     *      players position with the window.
+     * - attacks (using the attackkey) as idle or while moving, and the animation changes to attack using switchAttack.
+     * - levitates (using the jumpKey).
+     * - stays idle by not interacting with any of the keys by using switchIdle.
+     */
     playerMove() {
         var moveUpKey = this.moveKeys[0];
         var moveDownKey = this.moveKeys[1];
@@ -328,6 +358,11 @@ class Player {
         }
     }
 
+    /**
+     * This is a help function which handles the player's life loss. When player loses a life we need to respawn him at the
+     * starting point of the level facing down and we also play a small animation of his revival. Additionally, we reset his
+     * levitation timer, since he died he cannot drink the potion he used in that life, and restore any potions of the gameMap.
+     */
     loseLife() {
         this.lives -= 1;
         if (!songOof.isPlaying() && !this.changeToIdleDeath) {
@@ -346,10 +381,22 @@ class Player {
         }
     }
 
+    /**
+     * This method is the callback of the player sprite overlapping/ colliding with an enemy sprite, it results in the enemy
+     * sprite getting removed.
+     * @param {p5.play.sprite} player the player sprite that collides with the enemy sprite
+     * @param {p5.play.sprite} skeleton poisonous plant sprite that the player collides
+     */
     rekSkel(player, skeleton) {
         skeleton.remove();
     }
 
+    /**
+     * Method handles the freeze time between a player losing a life, respawning and then being able to move again. While the player
+     * is not able to move a warning appears on screen referencing his loss of live and the method returns false until he can move again
+     * which will return true.
+     * @returns true if player can move - hasn't just respawned, false if he just respawned
+     */
     canMove(){
         if(millis() <= respawnToIdle){
             textSize(50);
@@ -363,10 +410,18 @@ class Player {
         return true;
     }
 
+    /**
+     * A player cannot fall if he can levitate and he's holding his levitation/ jump key down, in any other case he can fall.
+     * @returns true if player can fall, false otherwise
+     */
     canFall(){
         return !(this.canLevitate && keyDown(this.moveKeys[5]));
     }
 
+    /**
+     * Stop method is used to stop the player on his colision with walls, by adding/ substracting the player's move speed from
+     * their position to make them look like they stay in place even if user is holding down any movement key.
+     */
     stop() {
         if (this.lastMove == 'R') {
             this.sprite.position.x -= this.moveSpeed;
@@ -383,22 +438,44 @@ class Player {
         }
     }
 
+    /**
+     * This method is the callback of the player sprite overlapping/ colliding with an coin sprite, it results in the coin
+     * sprite getting removed and the corresponding song playing.
+     * @param {p5.play.sprite} player 
+     * @param {p5.play.sprite} coin 
+     */
     getCoins(player, coin){
         songCoin.play();
         coin.remove();
     }
 
+    /**
+     * This method is the callback of the player sprite overlapping/ colliding with an potion sprite, it results in the potion
+     * sprite getting removed after adding it to the backup and the corresponding song playing.
+     * @param {p5.play.sprite} player 
+     * @param {p5.play.sprite} potion 
+     */
     getPotion(player, potion){
         songPotion.play();
         gameMap.potionsBackUp.add(potion);
         gameMap.potions.remove(potion);
     }
 
+    /**
+     * This method is the callback of the player sprite overlapping/ colliding with an life sprite, it results in the life
+     * sprite getting removed and the corresponding song playing.
+     * @param {p5.play.sprite} player 
+     * @param {p5.play.sprite} life 
+     */
     getLife(player, life){
         songHeart.play();
         life.remove();
     }
 
+    /**
+     * Getter for the prematureDeath attribute of the player.
+     * @returns boolean
+     */
     getPrematureDeath(){
         return this.prematureDeath;
     }
