@@ -1,5 +1,3 @@
-const p5 = require("../../../.vscode/extensions/samplavigne.p5-vscode-1.2.8/p5types");
-
 /**
  * @class Player representing a player of the game.
  */
@@ -384,8 +382,8 @@ class Player {
     /**
      * This method is the callback of the player sprite overlapping/ colliding with an enemy sprite, it results in the enemy
      * sprite getting removed.
-     * @param {p5.play.sprite} player the player sprite that collides with the enemy sprite
-     * @param {p5.play.sprite} skeleton poisonous plant sprite that the player collides
+     * @param {Sprite} player the player sprite that collides with the enemy sprite
+     * @param {Sprite} skeleton poisonous plant sprite that the player collides
      */
     rekSkel(player, skeleton) {
         skeleton.remove();
@@ -441,8 +439,8 @@ class Player {
     /**
      * This method is the callback of the player sprite overlapping/ colliding with an coin sprite, it results in the coin
      * sprite getting removed and the corresponding song playing.
-     * @param {p5.play.sprite} player 
-     * @param {p5.play.sprite} coin 
+     * @param {Sprite} player 
+     * @param {Sprite} coin 
      */
     getCoins(player, coin){
         songCoin.play();
@@ -452,8 +450,8 @@ class Player {
     /**
      * This method is the callback of the player sprite overlapping/ colliding with an potion sprite, it results in the potion
      * sprite getting removed after adding it to the backup and the corresponding song playing.
-     * @param {p5.play.sprite} player 
-     * @param {p5.play.sprite} potion 
+     * @param {Sprite} player 
+     * @param {Sprite} potion 
      */
     getPotion(player, potion){
         songPotion.play();
@@ -464,8 +462,8 @@ class Player {
     /**
      * This method is the callback of the player sprite overlapping/ colliding with an life sprite, it results in the life
      * sprite getting removed and the corresponding song playing.
-     * @param {p5.play.sprite} player 
-     * @param {p5.play.sprite} life 
+     * @param {Sprite} player 
+     * @param {Sprite} life 
      */
     getLife(player, life){
         songHeart.play();
