@@ -1,51 +1,79 @@
-var player1;
-var imagesPath = './assets/images/';
-var soundPath = './assets/sound/';
-var status1;
+//paths for assets (images and sound)
+var imagesPath = './assets/images/'; var soundPath = './assets/sound/';
+//variables that will hold player1 and status1 for the player of the game
+var player1; var status1;
+//variable that holds the gameMap of the current lvl
 var gameMap;
-var song1;
-var song2;
-var song3;
-var songScroll;
-var songCoin;
-var songHeart;
-var songPotion;
-var songFire;
-var songDeath;
+//variables that hold the songs and sfx sounds
+var song1; var song2; var song3;
+var songScroll; var songCoin; var songHeart;
+var songPotion; var songFire; var songDeath;
+//variable that holds the font used
 var alagardFont;
+//variable that indicates the current stage of the game,
+//the concept of stages is explained in the README/report
 var stage = -1;
-var scene1;
-var scene2;
-var controls;
-var tileset;
-var torch;
-var plant;
+//variables that store the image/ gifs assets after being loaded
+var scene1; var scene2; var controls;
+var tileset; var torch; var plant;
+//animation seconds is the time in millis that the death animation will run for
 var animationSeconds = 500;
+//the countdownSeconds is the time in seconds that the player should finish the
+//game in so that he can be granted the choice of one of the 2 endings
+//after finding out the truth
 var countdownSeconds = 180;
+//since our time is calculated in millis the countdown will be initialized to the
+//countdownSeconds in millis, the countdown is basically the timestamp of when (in real time)
+//it will end
 var countdown = countdownSeconds * 1000;
 var timeForCountdownToEnd = countdown;
+//a flag to check if the countdown was set or not, the countdown is set on the first level
 var countdownSet = false;
+//time left is the time that's left for the player to win the game
 var timeLeft = timeForCountdownToEnd;
+//death to idle is basically the timestamp of when (in real time) the death animation will stop and
+//the player will have the idle death animation instead
 var deathToIdle = animationSeconds;
+//similar to the deathToIdle this is the timestamp of when (in real time) the respawn animation should stop and
+//the player animation should change to idle
 var respawnToIdle = animationSeconds;
+//similar to the previous 2, levitationExpire is the timestamp of when (in real time) the levitation powerup should stop
 var levitationExpire = animationSeconds;
+//tiles stores the json file with the tiles properties
 var tiles;
 var numberOfLevels = 3;
+//levels stores the json file with the level layouts
 var levels;
+//eyeFrames is a dictionary that stores the eye animation frames
 var eyeFrames = {};
+//maps is a dictionary that stores the level maps as map_x with the corresponding Map object
 var maps = {};
-var lvl;
+//flag that indicates if the level should be changed
 var changeLvl = false;
+//ending choice var of the player
 var choice = "";
+//flag that indicates if the player made the choice of the 2 endings or not
 var madeChoice = false;
+//flag that indicates if the player is currently in level - map
 var isInLevel = false;
+//flag that indicates if the game is over - either death of player, or ending reached
 var gameOver = false;
-var reload = false;
+//flag that indicates that the ending should be a glitch
 var glitch = false;
+//variable that counts how many times the user pressed enter in the glitch ending
 var madEnter = 0;
+//how many "end" will be draw each time in the start, they are duplicated each time the ends are drawn
 var timesToDrawEnd = 10;
+//when to stop drawing ends
 var stopDrawEnd = timesToDrawEnd * 64;
 
+/**
+ * In the preload function of sketch the assets of the game are loaded. The assets consist of 
+ * - the json files containing the tile and level info
+ * - the font
+ * - the images
+ * - the sound
+ */
 function preload() {
   tiles = loadJSON(imagesPath + 'tiles/tiles.json');
   levels = loadJSON('./assets/levels.json');
