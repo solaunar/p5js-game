@@ -124,6 +124,55 @@ Most of the SFX are also taken from the Castlevania Trilogy. Others are from Yos
 * **fireball** - used when player attacks.
 * **scream** - used when player loses a life.
 
+# Member Contribution
+This project was conceptualised by all of us as we went on with the implementation. A lot of things changed from the original draft, including- but not limited to- the final product being so story heavy, as well as the game being a top-down view dungeon crawler instead of a platformer.
+
+More specifically we developed the following as a group, either by working simultaneously or by building up on what the other had already worked on:
+
+* Theme Choice
+* Overarching Story
+* Seeking for & Editing appropriate Tiles, Sprites and gifs
+* Conceptualisation of 4 possible endings
+* Settling on Items
+* Madness Mechanic
+* **Play Testing**
+
+Still, all separately developed segments were implemented after being outlined by the team as a group and with regular check-ins and progress updates.
+
+Indicatively and in alphabetical order, the members of our team have contributed to this project as such:
+
+* **Ana Lleshi**
+  * Player Controls & Animations
+  * Scrolls' Implementation
+  * End Screens Implementation
+  * Madness Counter & Eye
+  * Level 1 Idea (Chasm and moving Scroll)
+
+* **Vasilis Toskas**
+  * Item & Enemy Collisions
+  * Item & Enemy Implementation
+  * Status Bar
+  * Level 2 Idea (Skull made from Enemies)
+  * Author of original Script
+
+* **Despoina Georgiadi**
+  * Level Map Tuning & Implementation
+  * Wall Collisions
+  * Sound Implementation
+  * Start Screens Implementation
+  * Level 3 Idea (Labyrinth)
+
+### *Special credit and a huge thank you must be given to Ms **Ana Lleshi** for a complete clean-up and refactoring of our code.*
+
+# Issues & Overcoming them
+This section is devoted to challenges we came across during the development of this project and how we ended up facing them ...or in some cases embracing them.
+
+## Non-Looping Animation
+
+## Jumping to Levitating
+
+## Player Collision
+
 # How to launch the game
 ## Prerequisites
 * Any web browser, we strongly recommend to use [Microsoft Edge](https://www.microsoft.com/el-gr/edge), due to the fact that the contents load much faster.
