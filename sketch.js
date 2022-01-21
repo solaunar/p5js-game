@@ -66,6 +66,8 @@ var madEnter = 0;
 var timesToDrawEnd = 10;
 //when to stop drawing ends
 var stopDrawEnd = timesToDrawEnd * 64;
+//indicates which prologue text to print 1-4
+var prologueCounter = 1;
 
 /**
  * In the preload function of sketch the assets of the game are loaded. The assets consist of 
@@ -96,8 +98,14 @@ function setup() {
 function draw() {
 
   if (keyWentUp('SPACE') && !isInLevel && !gameOver) {
-    stage++;
-    changeLvl = true;
+    // if we are at the prologue stage and we havent displayed all prologue screens, increase prologue counter
+    if (stage==1 && prologueCounter<4){
+      prologueCounter++;
+    // otherwise increase stage counter
+    }else{
+      stage++;
+      changeLvl = true;
+    }
   }
 
   if (keyWentUp('ENTER') && gameOver && !glitch) {
@@ -285,8 +293,7 @@ function prologue() {
   fill(32);
   textSize(28);
   textWrap(WORD);
-  textAlign(LEFT, CENTER);
-  text(levels["prologue"], width / 2 - 300, height / 2 - 130, 620);
+  text(levels["prologue_" + prologueCounter], width / 2 - 300, height / 2 - 130, 620);
   if (frameCount % 60 < 30) {
     fill(66, 25, 93);
   } else {

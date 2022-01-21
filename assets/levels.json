@@ -1,5 +1,9 @@
 {
-  "prologue":"You are a reader - someone who can derive meaning from mere strokes forming all sorts of peculiar shapes.\n\nOnly you can read the ancient scrolls and find the Truth. But the ruins of your creators are suffocating. The stone looks like crying faces and the traps whisper your name sweetly.\n\nFor the sake of your own sanity, get out of there as soon as possible.",
+  "prologue_1":"In your lifetime you have acquired all. A family, a fortune, a name.\n\nEverything, yet still, nothing.\n\nAn endless chase for some sort of fulfillment that eventually, always faded into nothing.\n\nThere is nothing left to pursue, nothing to ease your restless soul for another month or two.",
+  "prologue_2":"With each passing day, you grow even more aware of your own cosmic insignificance.\n\nMaybe there is something... something to seek after. The only thing left, The Truth.\n\nAnd you know, you know that if this search doesn't work, nothing will.",
+  "prologue_3":"Hushed whispers cloaked by darkness, and a promise for what you seek at all costs.\n\nA purpose.\n\nIt was the reason you left everything behind and dove into this sea of secrets, for it was uncertainty that suffocated you the most.",
+  "prologue_4":"You are a reader - someone who can derive meaning from mere strokes forming all sorts of peculiar shapes.\n\nOnly you can read the ancient scrolls and find the Truth. But the ruins of your creators are suffocating. The stone looks like crying faces and the traps whisper your name sweetly.\n\nFor the sake of your own sanity, get out of there as soon as possible.",
+
   "map_1":[
       [10, 10, 10, 10, 10, 10,  9, 17, 18,  9, 10, 10, 10, 10, 10, 10],
       [10,  2,  3,  3,  3, 21,  5, 12, 12,  5, 21,  3,  4,  3,  3, 10],
