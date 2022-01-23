@@ -2,6 +2,36 @@
 
 This short game was implemented in the context of our Multimedia Technology semester assignment. The game was developed in javascript utilising the p5.js, p5.play.js and p5.sound.js libraries.
 
+# Table of contents
+- [Technologies used](#technologies-used)
+- [Game Description](#game-description)
+- [Main Concepts of the Game](#main-concepts-of-the-game)
+  * [Player](#player)
+  * [Stages](#stages)
+  * [Graphics](#graphics)
+  * [Sounds](#sounds)
+- [Project Layout](#project-layout)
+  * [Assets](#assets)
+  * [Libraties](#libraries)
+  * [Src](#src)
+  * [Other files](#other-files)
+- [Member Contribution](#member-contribution)
+- [Issues and Overcoming them](#issues-and-overcoming-them)
+  * [Non-Looping Animation](#non-looping-animation)
+  * [Jumping to Levitating](#jumping-to-levitating)
+  * [Player Collision](#player-collision)
+- [How to launch the game](#how-to-launch-the-game)
+  * [Prerequisites](#prerequisites)
+  * [Running with VS Code](#running-with-vs-code)
+  * [Running with Node http-server](#running-with-node-http-server)
+  * [Other ways to run](#other-ways-to-run)
+- [How to play](#how-to-play)
+- [Credits](#credits)
+  * [Visuals](#visuals)
+  * [Audio](#audio)
+  * [Story](#story)
+
+
 # Technologies used
 
 ## [Javascript](https://www.javascript.com)
@@ -82,7 +112,7 @@ Timer represents our character's time left before he loses his sanity. Each seco
 
 ## Graphics
 
-### Player
+### The Player
 The player character has fully animated sprites for moving up, down and left-right (same one mirrored), as well as attacking up, down and left-right. Additionally, they have a respawn animation for when they are spawned in the starting point of a level after losing a life. They also have a simple death animation which plays once when they lose all lives.
 
 ### The Eye
@@ -124,6 +154,59 @@ Most of the SFX are also taken from the Castlevania Trilogy. Others are from Yos
 * **fireball** - used when player attacks.
 * **scream** - used when player loses a life.
 
+# Project Layout
+The walkthrough of the files will be following the structure of the project's folders as they appear in any IDE- explorer.
+
+* ## Assets
+  * ### Fonts
+    This folder contains the `.ttf` file of the font we used in the game.
+  * ### Images
+    * #### eye
+      This folder contains the frames that make up the eye animation above the timer.
+    * #### player1
+      This folder is devided further into 3 folders (D, RL, U) each one of them contains all the needed frames to make up the player's animations at different directions (Down, RightLeft, Up).
+    * #### tiles
+      The tiles folder contains the `.png` image of the inanimate tiles as well as 2 `.gif` for the animated tiles (torch and enemy - plant). Additionally, to list the tiles in the `dungeon-tileset-full.png`, by marking them with a name and their "position" (row, column) of each individual tile, `tiles.json` was created and used in the code.
+    * #### Other images
+      Other `.png` and `.gif` files are stores in the images folder that are either used for the starting/ ending/ instructions screens as well as the shadow of the player and the icon of the game for the web tab.
+  * ### Sound
+      * #### SFX
+        This folder contains all the `.wav` or `.mp3` files that were used as sound effects in the game.
+      * #### tracks
+        This folder contains all the `.wav` files that were used as music in the game.
+  * ### `levels.json` file
+    This file contains a `JSON` object that has the following properties:
+      * `prologue_x`, `x = 1..4`. Each of these properties is a `string` that has the script of the prologue screens, the number following the `prologue` prefix is the number of the screen the script belongs to.
+      * `map_x`, `x = 1..3`. Each of these properties is a 2D Array of `int` that store the layout of the map of the levels, the number following the `map` prefix is the number of the level the map belongs to. Each number corresponds to an item from the `tiles.json` file, whereas 33 that is not found in that list is matched to the `torch` item and -1 indicates that there should be no tile drawn in that placement.
+      * `items_x`, `x = 1..3`. Each of these properties is a 2D Array of `int` that store the layout of the items of the map of the levels, the number following the `items` prefix is the number of the level the items belong to. Each number corresponds to an item from the `tiles.json` file, whereas 33 that is not found in that list is matched to the `torch` item and -1 indicates that there should be no tile drawn in that placement.
+      * `scroll_x_move`, `x = 1..3`. Each of these properties is a `boolean` that indicates if the scroll item should move in a live motion on the level or not, the number following the `scroll` prefix is the number of the level the scroll belongs to.
+      * `scroll_x`, `x = 1..3`. Each of these properties is a `string` that stores the scroll contents of each level, the number following the `scroll` prefix is the number of the level the scroll content belongs to and is shown after the relative level completion.
+      * `ending_x`, `x = n, m, p, c`. Each of these properties is a `string` that has the script of the ending screens, the character following the `ending` prefix is the type of the ending the script belongs to. Specifically, n is the ending that the player finds about the truth but choses to die, m is the ending that he choses to endure, whereas p is the premature ending and c is the glitch ending.
+* ## Libraries
+  This folder stores all the `p5.js ` libraries that were used for developing and that are needed for running the game.
+* ## Src
+  This folder contains some extra `.js` files we had to implement for the game. They are stored in a seperate folder in order to keep the general `p5.js` project structure. The files are the following: 
+    * ### `map.js`
+      This file contains the `Map` class that is used to represent map objects, as they were described in the concepts.
+    * ### `player.js`
+      This file contains the `Player` class that is used to represent player instances, specifically one used in the whole game, as it was described in the concepts.
+    * ### `status.js`
+      This file contains the `Status` class that is used to represent the status of a player, specifically one used in the whole game, as it was described in the concepts.
+    * ### `tile.js`
+      This file contains the `Tile` class that is used to represent the tiles that make up a map, both layout and item tiles, as they were described in the concepts.
+* ## Other files
+  * ### `index.html`
+    This is the needed `.html` file that loads the `.json` scrips and opens as a tab in the browser. Also typical in a `p5.js` project.
+  * ### `jsonconfig.json`
+    A configuration file to include the scripts needed.
+  * ### `sketch.js`
+    This file is the main file of a `p5.js` project. This one contains the functions needed for loading the assets and then drawing - showing them on the user's browser and support the logic implemented for them.
+  * ### `style.css`
+    We need to reassure that the `index.html` page has no margin or padding in the browser layout as well as that the `canvas` property of `p5.js` is styled in a block display to properly work. Also typical in a `p5.js` project.
+
+### **Note:** All of the `.js` scripts are sufficiently commented to describe the functionality of the code.
+     
+
 # Member Contribution
 This project was conceptualised by all of us as we went on with the implementation. A lot of things changed from the original draft, including- but not limited to- the final product being so story heavy, as well as the game being a top-down view dungeon crawler instead of a platformer.
 
@@ -164,7 +247,7 @@ Indicatively and in alphabetical order, the members of our team have contributed
 
 ### *Special credit and a huge thank you must be given to Ms **Ana Lleshi** for a complete clean-up and refactoring of our code.*
 
-# Issues & Overcoming them
+# Issues and Overcoming them
 This section is devoted to challenges we came across during the development of this project and how we ended up facing them ...or in some cases embracing them.
 
 ## Non-Looping Animation
