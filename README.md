@@ -127,7 +127,7 @@ Instead of a sprite with multi-layer animation, the plant enemies’ graphics ar
 Same as the plant, the torches placed around the map are gifs. They have a  bright orange wall tile placed beneath them to give off a “glowing” effect.
 
 ### Tile Map
-The map consists of a 16x12 array of elements taken from the picture [here](/assets/images/tiles/dungeon-tileset-full.png).
+The map consists of a 16x12 array of elements taken from the picture [here](./assets/images/tiles/dungeon-tileset-full.png).
 
 The original tileset image is sized 128x64 pixels, each tile taking up a 16x16 pixel square. As you will see in the game, not all tiles made it into the levels. 
 
@@ -332,3 +332,4 @@ The following sprites were slighty edited to fit our needs for the game.
 
 ## Story
 Original script from our team, inspired by eldritch themes and literature.
+The script can be found [here](./story.pdf).
