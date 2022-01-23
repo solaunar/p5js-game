@@ -228,10 +228,10 @@ Indicatively and in alphabetical order, the members of our team have contributed
   * Player Controls & Animations
   * Scrolls' Implementation
   * End Screens Implementation
-  * Madness Counter & Eye
+  * Madness & Levitation Counters
   * Level 1 Idea (Chasm and moving Scroll)
 
-* **Vasilis Toskas**
+* **Vasileios Toskas**
   * Item & Enemy Collisions
   * Item & Enemy Implementation
   * Status Bar
@@ -247,14 +247,26 @@ Indicatively and in alphabetical order, the members of our team have contributed
 
 ### *Special credit and a huge thank you must be given to Ms **Ana Lleshi** for a complete clean-up and refactoring of our code.*
 
+### Many bugs were also spotted by friends playing this game after following our [instructions](#how-to-launch-the-game). Third-party play testing helped us immensely in finding errors we would have never thought existed but were obvious to someone not associated with the game's development.
 # Issues and Overcoming them
 This section is devoted to challenges we came across during the development of this project and how we ended up facing them ...or in some cases embracing them.
 
 ## Non-Looping Animation
+The character animations for walking and attacking are all looping, as long as that certain action's button is being pressed. However, when it came to adding a death animation for when all lives were lost, we run across the issue of making that death animation only play *once*.
+
+Οur fix was implementing a counter indicating how long the animation was meant to play out for. As long as the counter hadn't run out, the animation kept playing; all we had to do is make sure said counter was short enough for the animation to play out just once.
 
 ## Jumping to Levitating
+In our attempt to implement a jumping action we faced the issue of being unable to stop said action. Instead of jumping once, reaching a maximum height and then falling down, the player could keep jumping by spamming the jump action button. It looked like the character was floating.
+
+Well floating *is* undoubtedly more original than jumping, and this *is* a game with eldritch themes and dark magic, so floating seemed more fitting. We ended up implementing the floating potion which grants the ability to the player to float for 10 seconds, a mechanic that much better suited our level plans and obstacles.
 
 ## Player Collision
+Our perspective is top-down (aka *angled top-down*), unlike the true top-down view, you are able to see the side of each wall taking up the space beneath it. Those side walls are where we place our torches, banners etc. 
+
+When it came to making the player collide with those walls, is when we realised that the player's collision box simply couldn't be the player's sprite. The top most part of the sprite, the head, would collide with the wall in a non-sensical way when the player *should* be able to walk closer to the wall still.
+
+After multiple attempts at containing the collision box to the sprite's lower half, we found the solution we were looking for. The collision box is not based on the player's sprite, but rather the player's *shadow* sprite. This way traversing the dungeon feels natural, you are only "crushing" with what you can't walk on.
 
 # How to launch the game
 ## Prerequisites
