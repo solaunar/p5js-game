@@ -224,28 +224,28 @@ Still, all separately developed segments were implemented after being outlined b
 
 Indicatively and in alphabetical order, the members of our team have contributed to this project as such:
 
-* **Ana Lleshi**
+* **@solaunar**
   * Player Controls & Animations
   * Scrolls' Implementation
   * End Screens Implementation
   * Madness & Levitation Counters
   * Level 1 Idea (Chasm and moving Scroll)
 
-* **Vasileios Toskas**
+* **@VasilhsToskas**
   * Item & Enemy Collisions
   * Item & Enemy Implementation
   * Status Bar
   * Level 2 Idea (Skull made from Enemies)
   * Author of original Script
 
-* **Despoina Georgiadi**
+* **@DebsTheLemon**
   * Level Map Tuning & Implementation
   * Wall Collisions
   * Sound Implementation
   * Start Screens Implementation
   * Level 3 Idea (Labyrinth)
 
-### *Special credit and a huge thank you must be given to Ms **Ana Lleshi** for a complete clean-up and refactoring of our code.*
+### *Special credit and a huge thank you must be given to Ms **@solaunar** for a complete clean-up and refactoring of our code.*
 
 ### Many bugs were also spotted by friends playing this game after following our [instructions](#how-to-launch-the-game). Third-party play testing helped us immensely in finding errors we would have never thought existed but were obvious to someone not associated with the game's development.
 # Issues and Overcoming them
