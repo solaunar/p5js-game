@@ -1,4 +1,6 @@
-# Lilin: Pursuit of Truth
+![Lilin Pursuit of Truth](./Lilin.png)
+
+# Lilin Pursuit of Truth
 
 This short game was implemented in the context of our Multimedia Technology semester assignment. The game was developed in javascript utilising the p5.js, p5.play.js and p5.sound.js libraries.
 
